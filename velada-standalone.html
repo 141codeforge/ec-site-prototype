@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VELADA — 時が磨く、アガベの光。</title>
+<meta name="description" content="ハリスコ州ロス・アルトスの高地で八年をかけて育てたブルーアガベを、小さな蒸留所でゆっくりと蒸留し、オーク樽の静寂の中で熟成させる。ベラーダは、待つことを知る大人のためのアガベスピリッツです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   VELADA — Premium Tequila EC site
+   Recreated from the Claude Design prototype (Velada EC.dc.html)
+   ============================================================ */
+
+:root {
+  --bg:        #0e0c08;
+  --panel:     #12100a;  /* age gate card               */
+  --panel-2:   #14110b;  /* product card / detail modal */
+  --panel-3:   #110e09;  /* collection section          */
+  --img-bg:    #0f0d08;  /* detail image backdrop       */
+
+  --text:      #ece3d2;
+  --gold:      #c8a45e;
+  --gold-hi:   #e2c78d;
+  --gold-dim:  #8a7448;
+  --muted:     #a2957d;
+  --muted-2:   #6e6350;
+  --warn:      #b0793a;
+
+  --line:      rgba(200,164,94,0.12);
+  --line-2:    rgba(200,164,94,0.14);
+
+  --serif-display: 'Cormorant Garamond', serif;
+  --serif-body:    'Shippori Mincho', serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 64px;   /* keep fixed header from covering anchored sections */
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a { color: var(--gold); text-decoration: none; }
+a:hover { color: var(--gold-hi); }
+
+::selection { background: var(--gold); color: var(--bg); }
+
+input::placeholder { color: var(--muted-2); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up      { animation: fadeUp 0.9s ease both; }
+.fade-up--slow{ animation-duration: 1.1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-up { animation: none; }
+}
+
+/* ── Shared bits ─────────────────────────────────────────── */
+.eyebrow {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.34em;
+  color: var(--gold-dim);
+}
+
+.section {
+  padding: clamp(72px, 10vw, 140px) clamp(24px, 6vw, 96px);
+  border-top: 1px solid var(--line);
+}
+
+.section__title {
+  margin: 18px 0 0;
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(34px, 4.5vw, 56px);
+  letter-spacing: 0.06em;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn {
+  font-family: var(--serif-body);
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.btn--solid  { background: var(--gold); color: var(--bg); padding: 14px 34px; }
+.btn--solid:hover { background: var(--gold-hi); }
+.btn--sm     { padding: 15px 34px; font-size: 13px; }
+.btn--ghost  { background: transparent; color: var(--muted); border: 1px solid rgba(200,164,94,0.3); padding: 14px 24px; letter-spacing: 0.12em; }
+.btn--ghost:hover { color: var(--text); }
+.btn--outline{ background: transparent; color: var(--gold); border: 1px solid var(--gold); padding: 16px 44px; letter-spacing: 0.22em; }
+.btn--outline:hover { background: var(--gold); color: var(--bg); }
+
+/* ── Photo + Unsplash credit ─────────────────────────────── */
+.photo { position: relative; margin: 0; overflow: hidden; background: var(--img-bg); }
+.photo--fill { width: 100%; height: 100%; }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.credit {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  max-width: calc(100% - 12px);
+  z-index: 3;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font: 10px/1.2 system-ui, -apple-system, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  backdrop-filter: blur(6px);
+}
+.credit a { color: inherit; text-decoration: none; }
+.credit a:hover, .credit a:focus-visible { text-decoration: underline; }
+
+/* ── Age-verification modal ──────────────────────────────── */
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10,8,5,0.82);
+  backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.gate[hidden] { display: none; }
+.gate__card {
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid rgba(200,164,94,0.35);
+  background: var(--panel);
+  padding: clamp(36px, 6vw, 64px) clamp(24px, 5vw, 56px);
+  animation: fadeUp 0.7s ease both;
+}
+.gate__logo {
+  font-family: var(--serif-display);
+  font-size: 34px;
+  letter-spacing: 0.32em;
+  color: var(--gold);
+}
+.gate__rule { width: 40px; height: 1px; background: rgba(200,164,94,0.5); margin: 22px auto; }
+.gate__q    { margin: 0 0 8px; font-size: 15px; letter-spacing: 0.12em; }
+.gate__note { margin: 0 0 28px; font-size: 12px; color: var(--muted); line-height: 1.9; }
+.gate__actions { display: flex; gap: 12px; justify-content: center; }
+.gate__underage { margin: 24px 0 0; font-size: 12px; color: var(--warn); }
+.gate__underage[hidden] { display: none; }
+
+/* ── Fixed header ────────────────────────────────────────── */
+.header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(20px, 4vw, 56px);
+  background: rgba(14,12,8,0.72);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-2);
+}
+.header__logo {
+  font-family: var(--serif-display);
+  font-size: 22px;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  cursor: pointer;
+}
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 3vw, 36px);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+}
+.navlink { cursor: pointer; color: var(--muted); transition: color 0.25s ease; }
+.navlink:hover { color: var(--text); }
+
+.cart {
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  color: var(--gold);
+  transition: color 0.25s ease;
+}
+.cart:hover { color: var(--gold-hi); }
+.cart__badge {
+  position: absolute;
+  top: -7px; right: -9px;
+  min-width: 15px; height: 15px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--bg);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+.cart__badge[hidden] { display: none; }
+
+/* ── Hero ────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  align-items: center;
+  gap: clamp(24px, 5vw, 72px);
+  padding: 84px clamp(24px, 6vw, 96px) 48px;
+  position: relative;
+}
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 72% 42%, rgba(176,121,58,0.14), transparent 65%);
+  pointer-events: none;
+}
+.hero__copy { position: relative; }
+.hero__copy .eyebrow { margin-bottom: 20px; }
+.hero__title {
+  margin: 0;
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(64px, 9vw, 128px);
+  line-height: 0.95;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+.hero__tagline {
+  margin: 28px 0 0;
+  font-size: clamp(20px, 2.6vw, 30px);
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+.hero__lead {
+  margin: 22px 0 0;
+  max-width: 44ch;
+  font-size: 14px;
+  line-height: 2.2;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.hero__cta { margin-top: 40px; }
+.hero__media {
+  position: relative;
+  height: clamp(420px, 62vh, 640px);
+}
+
+/* ── Story ───────────────────────────────────────────────── */
+.story__list {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 8vw, 110px);
+  margin-top: clamp(48px, 7vw, 90px);
+}
+.story__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(28px, 5vw, 72px);
+  align-items: center;
+}
+.story__kicker {
+  font-family: var(--serif-display);
+  font-size: 15px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+}
+.story__heading {
+  margin: 16px 0 0;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+.story__body {
+  margin: 18px 0 0;
+  max-width: 46ch;
+  font-size: 14px;
+  line-height: 2.3;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.story__media { height: clamp(280px, 36vw, 420px); }
+
+/* ── Collection ──────────────────────────────────────────── */
+.collection { background: var(--panel-3); }
+.collection__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(20px, 3vw, 36px);
+  margin-top: clamp(40px, 6vw, 72px);
+}
+
+.card {
+  cursor: pointer;
+  border: 1px solid rgba(200,164,94,0.16);
+  background: var(--panel-2);
+  transition: border-color 0.4s;
+}
+.card:hover { border-color: rgba(200,164,94,0.5); }
+
+.card__media { position: relative; height: 320px; }
+.card__media .photo { position: absolute; inset: 0; }
+
+.card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,8,5,0.92) 20%, rgba(10,8,5,0.55) 55%, transparent);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  z-index: 2;
+}
+.card:hover .card__overlay,
+.card:focus-visible .card__overlay { opacity: 1; }
+.card__age    { font-size: 11px; letter-spacing: 0.26em; color: var(--gold); }
+.card__notes  { margin-top: 10px; font-size: 12px; line-height: 2; color: var(--text); }
+.card__more   { margin-top: 12px; font-size: 11px; letter-spacing: 0.2em; color: var(--gold-dim); }
+
+.card__badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  z-index: 2;
+  background: rgba(14,12,8,0.85);
+  border: 1px solid rgba(200,164,94,0.4);
+  color: var(--gold);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 5px 10px;
+  pointer-events: none;
+}
+
+.card__info { padding: 20px 22px 24px; }
+.card__name  { font-family: var(--serif-display); font-size: 21px; letter-spacing: 0.14em; color: var(--text); }
+.card__jp    { margin-top: 6px; font-size: 12px; letter-spacing: 0.1em; color: var(--muted); }
+.card__price { margin-top: 14px; font-size: 14px; letter-spacing: 0.08em; color: var(--gold); }
+
+/* ── Product-detail modal ────────────────────────────────── */
+.detail {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(10,8,5,0.78);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 40px);
+}
+.detail[hidden] { display: none; }
+.detail__card {
+  position: relative;
+  max-width: 960px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--panel-2);
+  border: 1px solid rgba(200,164,94,0.3);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  animation: fadeUp 0.5s ease both;
+}
+.detail__close {
+  position: absolute;
+  top: 12px; right: 14px;
+  z-index: 2;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 26px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.25s ease;
+}
+.detail__close:hover { color: var(--text); }
+.detail__media { min-height: 380px; background: var(--img-bg); position: relative; }
+.detail__media .photo { position: absolute; inset: 0; }
+.detail__body { padding: clamp(28px, 4vw, 48px); }
+.detail__en   { font-size: 11px; letter-spacing: 0.3em; color: var(--gold-dim); }
+.detail__name {
+  margin: 12px 0 0;
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(30px, 3.4vw, 40px);
+  letter-spacing: 0.1em;
+}
+.detail__meta { margin-top: 8px; font-size: 13px; color: var(--muted); letter-spacing: 0.1em; }
+.detail__desc { margin: 22px 0 0; font-size: 13px; line-height: 2.2; color: var(--muted); text-wrap: pretty; }
+
+.detail__notes { margin-top: 26px; border-top: 1px solid rgba(200,164,94,0.18); }
+.detail__note-row {
+  display: flex;
+  gap: 18px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.detail__note-label { width: 3.5em; color: var(--gold-dim); letter-spacing: 0.14em; flex-shrink: 0; }
+.detail__note-val   { color: var(--text); }
+
+.detail__buyrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.detail__price { font-size: 22px; letter-spacing: 0.06em; color: var(--gold); }
+.detail__price small { font-size: 11px; color: var(--gold-dim); }
+.detail__added { margin: 14px 0 0; font-size: 12px; color: var(--gold); text-align: right; }
+.detail__added[hidden] { display: none; }
+.detail__fine { margin: 22px 0 0; font-size: 11px; line-height: 2; color: var(--muted-2); }
+
+/* ── Members ─────────────────────────────────────────────── */
+.members {
+  padding: clamp(80px, 11vw, 150px) clamp(24px, 6vw, 96px);
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, #0e0c08, #141008 55%, #0e0c08);
+  text-align: center;
+}
+.members__title {
+  margin: 20px 0 0;
+  font-family: var(--serif-display);
+  font-weight: 500;
+  font-size: clamp(32px, 4.2vw, 52px);
+  letter-spacing: 0.08em;
+}
+.members__lead {
+  margin: 24px auto 0;
+  max-width: 52ch;
+  font-size: 14px;
+  line-height: 2.3;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.members__form {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 38px;
+}
+.members__input {
+  font-family: var(--serif-body);
+  background: transparent;
+  border: 1px solid rgba(200,164,94,0.35);
+  color: var(--text);
+  padding: 15px 20px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  width: min(320px, 70vw);
+  outline: none;
+}
+.members__input:focus { border-color: rgba(200,164,94,0.7); }
+.members__fine { margin: 18px 0 0; font-size: 11px; color: var(--muted-2); }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--line-2);
+  padding: clamp(48px, 7vw, 80px) clamp(24px, 6vw, 96px) 36px;
+}
+.footer__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 36px;
+}
+.footer__logo { font-family: var(--serif-display); font-size: 24px; letter-spacing: 0.3em; color: var(--gold); }
+.footer__addr { margin: 16px 0 0; font-size: 12px; line-height: 2.1; color: var(--muted); }
+.footer__col  { font-size: 13px; line-height: 2.6; letter-spacing: 0.1em; }
+.footer__label{ font-size: 11px; letter-spacing: 0.28em; color: var(--gold-dim); margin-bottom: 10px; }
+.footer__legal {
+  margin: 44px 0 0;
+  padding-top: 22px;
+  border-top: 1px solid rgba(200,164,94,0.1);
+  font-size: 11px;
+  line-height: 2;
+  color: var(--muted-2);
+}
+
+</style>
+</head>
+<body>
+
+  <!-- ── 年齢確認モーダル ─────────────────────────────────── -->
+  <div class="gate" id="gate" aria-modal="true" role="dialog" aria-label="年齢確認">
+    <div class="gate__card">
+      <div class="gate__logo">VELADA</div>
+      <div class="gate__rule"></div>
+      <p class="gate__q">お客様は20歳以上ですか？</p>
+      <p class="gate__note">このサイトはアルコール飲料を取り扱っています。<br>20歳未満の方はご覧いただけません。</p>
+      <div class="gate__actions">
+        <button class="btn btn--solid" id="gateYes">はい、20歳以上です</button>
+        <button class="btn btn--ghost gate__no" id="gateNo">いいえ</button>
+      </div>
+      <p class="gate__underage" id="gateUnderage" hidden>申し訳ございません。20歳未満の方にはサイトをご案内できません。</p>
+    </div>
+  </div>
+
+  <!-- ── ヘッダー ─────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header__logo" data-nav="top">VELADA</div>
+    <nav class="header__nav">
+      <span class="navlink" data-nav="story">ストーリー</span>
+      <span class="navlink" data-nav="collection">コレクション</span>
+      <span class="navlink" data-nav="members">会員</span>
+      <span class="cart" id="cart" data-nav="collection" aria-label="カート">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 7h12l-1.2 12.2a1.8 1.8 0 0 1-1.8 1.8H9a1.8 1.8 0 0 1-1.8-1.8L6 7z"></path><path d="M9 7V6a3 3 0 0 1 6 0v1"></path></svg>
+        <span class="cart__badge" id="cartBadge" hidden>0</span>
+      </span>
+    </nav>
+  </header>
+
+  <!-- ── ヒーロー ─────────────────────────────────────────── -->
+  <section class="hero" aria-label="ヒーロー">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__copy fade-up">
+      <p class="eyebrow">AGAVE AZUL 100% — LOS ALTOS, JALISCO</p>
+      <h1 class="hero__title">VELADA</h1>
+      <p class="hero__tagline">時が磨く、アガベの光。</p>
+      <p class="hero__lead">ハリスコ州ロス・アルトスの高地で八年をかけて育てたブルーアガベを、小さな蒸留所でゆっくりと蒸留し、オーク樽の静寂の中で熟成させる。ベラーダは、待つことを知る大人のためのアガベスピリッツです。</p>
+      <button class="btn btn--outline hero__cta" data-nav="collection">コレクションを見る</button>
+    </div>
+    <div class="hero__media fade-up fade-up--slow">
+      <figure class="photo photo--fill">
+        <img src="https://images.unsplash.com/photo-1678667593664-792513e9ff7b?q=80&w=1400&auto=format&fit=crop" alt="ボトルのメインビジュアル" loading="eager">
+        <span class="credit"><a href="https://unsplash.com/@capture_it?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Hector Reyes</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ── ブランドストーリー ──────────────────────────────── -->
+  <section class="section story" id="story" aria-label="ブランドストーリー">
+    <p class="eyebrow">OUR STORY</p>
+    <h2 class="section__title">大地から、樽の静寂へ。</h2>
+    <div class="story__list">
+
+      <article class="story__row">
+        <div class="story__text" style="order:1">
+          <div class="story__kicker">01 — CULTIVO</div>
+          <h3 class="story__heading">八年を土に委ねる</h3>
+          <p class="story__body">標高2,000メートル、ロス・アルトスの赤土。ヒマドール（アガベ収穫職人）は、糖度が頂点に達する八年目の瞬間だけを待ちます。早すぎても、遅すぎてもならない。畑仕事は、時間との静かな対話です。</p>
+        </div>
+        <div class="story__media" style="order:2">
+          <figure class="photo photo--fill">
+            <img src="https://images.unsplash.com/photo-1706888135824-20ec9010b7bc?q=80&w=1400&auto=format&fit=crop" alt="アガベ畑の写真" loading="lazy">
+            <span class="credit"><a href="https://unsplash.com/@scottywatty?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Scott Tobin</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
+          </figure>
+        </div>
+      </article>
+
+      <article class="story__row">
+        <div class="story__text" style="order:2">
+          <div class="story__kicker">02 — DESTILACIÓN</div>
+          <h3 class="story__heading">石窯と銅、変わらぬ手仕事</h3>
+          <p class="story__body">収穫したピニャは石窯で三日かけてゆっくりと蒸し上げ、小さな銅製ポットスチルで二度蒸留します。効率よりも輪郭を。一度に仕込むのは、わずか数百リットルです。</p>
+        </div>
+        <div class="story__media" style="order:1">
+          <figure class="photo photo--fill">
+            <img src="https://images.unsplash.com/photo-1683313890724-ec2df503a9d6?q=80&w=1400&auto=format&fit=crop" alt="蒸留所・銅製ポットスチルの写真" loading="lazy">
+            <span class="credit"><a href="https://unsplash.com/@danicajean?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Danica Hennig</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
+          </figure>
+        </div>
+      </article>
+
+      <article class="story__row">
+        <div class="story__text" style="order:1">
+          <div class="story__kicker">03 — AÑEJAMIENTO</div>
+          <h3 class="story__heading">樽の静寂の中で</h3>
+          <p class="story__body">地下熟成庫に眠るオーク樽の中で、スピリッツは琥珀色の深みをまといます。十ヶ月、二年、五年、八年——熟成年数ごとに異なる表情は、そのまま時間の味わいです。</p>
+        </div>
+        <div class="story__media" style="order:2">
+          <figure class="photo photo--fill">
+            <img src="https://images.unsplash.com/photo-1638286629485-bb417ced482e?q=80&w=1400&auto=format&fit=crop" alt="熟成庫・オーク樽の写真" loading="lazy">
+            <span class="credit"><a href="https://unsplash.com/@kurti?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Kurt Liebhaeuser</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
+          </figure>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── 商品ラインナップ ────────────────────────────────── -->
+  <section class="section collection" id="collection" aria-label="商品ラインナップ">
+    <p class="eyebrow">COLLECTION</p>
+    <h2 class="section__title">熟成が語る、四つの表情。</h2>
+    <div class="collection__grid" id="productGrid"></div>
+  </section>
+
+  <!-- ── 商品詳細モーダル ────────────────────────────────── -->
+  <div class="detail" id="detail" aria-modal="true" role="dialog" aria-label="商品詳細" hidden></div>
+
+  <!-- ── 会員先行販売 ────────────────────────────────────── -->
+  <section class="section members" id="members" aria-label="会員先行販売">
+    <p class="eyebrow">MEMBERS ONLY</p>
+    <h2 class="members__title">GRAN RESERVA 先行販売</h2>
+    <p class="members__lead">樽番号を刻んだ八年熟成のエクストラアネホ「グラン・レセルバ」は、年間三百本のみの限定生産。会員のお客様に、一般発売に先立ちご案内いたします。</p>
+    <form class="members__form" id="membersForm" novalidate>
+      <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
+      <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
+    </form>
+    <p class="members__fine">ご登録には20歳以上であることの確認が必要です。</p>
+  </section>
+
+  <!-- ── フッター ─────────────────────────────────────────── -->
+  <footer class="footer" aria-label="フッター">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__logo">VELADA</div>
+        <p class="footer__addr">Casa Velada Destilería<br>Los Altos, Jalisco, México<br>輸入・販売：ベラーダ・ジャパン株式会社</p>
+      </div>
+      <div class="footer__col">
+        <div class="footer__label">BRAND</div>
+        <div><a href="#story" data-nav="story">ブランドストーリー</a></div>
+        <div><a href="#collection" data-nav="collection">コレクション</a></div>
+        <div><a href="#members" data-nav="members">会員プログラム</a></div>
+      </div>
+      <div class="footer__col">
+        <div class="footer__label">FOLLOW</div>
+        <div><a href="#">Instagram</a></div>
+        <div><a href="#">X</a></div>
+        <div><a href="#">Newsletter</a></div>
+      </div>
+    </div>
+    <p class="footer__legal">飲酒は20歳になってから。飲酒運転は法律で禁止されています。妊娠中や授乳期の飲酒は、胎児・乳児の発育に悪影響を与えるおそれがあります。お酒は適量を。<br>© 2026 Casa Velada Destilería. All rights reserved.</p>
+  </footer>
+
+  <script>
+/* ============================================================
+   VELADA — interactions
+   Age gate · nav scroll · product grid · detail modal · cart
+   ============================================================ */
+(() => {
+  'use strict';
+
+  const UTM = '?utm_source=claude_design&utm_medium=referral';
+  const UNSPLASH_HOME = 'https://unsplash.com/' + UTM;
+
+  /* ── Product data (mirrors the prototype's `data` array) ── */
+  const PRODUCTS = [
+    {
+      slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
+      age: '10ヶ月', price: '¥18,700', badge: '',
+      img: 'https://images.unsplash.com/photo-1698288547419-407ca6bafe2a?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'Jon Lanzieri', creditHref: 'https://unsplash.com/@jonlanzieri',
+      ph: 'REPOSADO ボトル写真',
+      notesLine: '蜂蜜 ／ バニラ ／ 焼いた青アガベ',
+      aroma: '蜂蜜、バニラ、かすかな柑橘の花',
+      palate: '焼いた青アガベの甘み、軽いオークのスパイス',
+      finish: '穏やかで澄んだ、ミネラルを感じる余韻',
+      desc: 'アメリカンオークの旧バーボン樽で10ヶ月。アガベ本来の輝きに、樽由来のやわらかな甘みがひと筆加わった、蒸留所の原点となる一本です。'
+    },
+    {
+      slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
+      age: '26ヶ月', price: '¥36,300', badge: '',
+      img: 'https://images.unsplash.com/photo-1718881949298-b658a109bf0b?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'SJ 📸', creditHref: 'https://unsplash.com/@uxsj_ph',
+      ph: 'AÑEJO ボトル写真',
+      notesLine: 'キャラメル ／ オーク ／ ドライフルーツ',
+      aroma: 'キャラメル、トーストしたオーク、オレンジピール',
+      palate: 'ドライフルーツの凝縮感と、しなやかなタンニン',
+      finish: '長く温かい、シガーを思わせる余韻',
+      desc: 'フレンチオークとアメリカンオークを使い分け、26ヶ月の熟成を経て瓶詰め。ウイスキー愛好家にこそ味わっていただきたい、深みのあるアネホです。'
+    },
+    {
+      slot: 'extra-anejo', name: 'EXTRA AÑEJO', en: 'EXTRA AÑEJO', jp: 'エクストラアネホ',
+      age: '5年', price: '¥79,200', badge: '小ロット',
+      img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
+      ph: 'EXTRA AÑEJO ボトル写真',
+      notesLine: 'カカオ ／ タバコリーフ ／ ベーキングスパイス',
+      aroma: 'ダークカカオ、タバコリーフ、乾いた革',
+      palate: 'ビターチョコレートとベーキングスパイスの重層',
+      finish: '静かに続く、ビロードのような長い余韻',
+      desc: '五年の歳月を樽の中で過ごした、当蒸留所の粋。一樽ごとに瓶詰めされ、ラベルには樽番号が手書きで記されます。特別な夜のための一本に。'
+    },
+    {
+      slot: 'gran-reserva', name: 'GRAN RESERVA', en: 'EXTRA AÑEJO — GRAN RESERVA', jp: 'グラン・レセルバ ／ 8年熟成',
+      age: '8年', price: '¥165,000', badge: '会員限定 300本',
+      img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
+      ph: 'GRAN RESERVA ボトル写真',
+      notesLine: '黒糖 ／ 熟した無花果 ／ 古樽の香気',
+      aroma: '黒糖、熟した無花果、白檀',
+      palate: '蜜のような粘性と、幾重にも折り重なる樽香',
+      finish: 'いつまでも消えない、瞑想的な余韻',
+      desc: '八年熟成、年間三百本のみ。職人が一本ずつ吹いたクリスタルボトルを桐箱に納めてお届けします。贈答に、そして人生の節目に。'
+    }
+  ];
+
+  /* ── Small DOM helpers ───────────────────────────────────── */
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+  // Text nodes are set via textContent, so page copy is inert. Attribute
+  // values here come only from the trusted PRODUCTS table above.
+  const el = (tag, props = {}, ...kids) => {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(props)) {
+      if (k === 'class') node.className = v;
+      else if (k === 'text') node.textContent = v;
+      else if (k in node) node[k] = v;
+      else node.setAttribute(k, v);
+    }
+    for (const kid of kids) if (kid != null) node.append(kid);
+    return node;
+  };
+
+  // Unsplash credit chip: "Photo by {name} on Unsplash", each part linked
+  // with the required utm referral params (mirrors image-slot.js).
+  const creditChip = (name, href) => {
+    const span = el('span', { class: 'credit' });
+    span.append('Photo by ');
+    span.append(el('a', { href: href + UTM, target: '_blank', rel: 'noopener noreferrer', text: name }));
+    span.append(' on ');
+    span.append(el('a', { href: UNSPLASH_HOME, target: '_blank', rel: 'noopener noreferrer', text: 'Unsplash' }));
+    return span;
+  };
+
+  const photo = (src, alt, name, href) =>
+    el('figure', { class: 'photo photo--fill' },
+      el('img', { src, alt, loading: 'lazy' }),
+      creditChip(name, href)
+    );
+
+  /* ── Age-verification gate ───────────────────────────────── */
+  const gate = $('#gate');
+  $('#gateYes').addEventListener('click', () => { gate.hidden = true; });
+  $('#gateNo').addEventListener('click', () => { $('#gateUnderage').hidden = false; });
+
+  /* ── Header / nav smooth scroll ──────────────────────────── */
+  const navTo = (target) => {
+    if (target === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const node = document.getElementById(target);
+    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  $$('[data-nav]').forEach((node) => {
+    node.addEventListener('click', (e) => {
+      if (node.tagName === 'A') e.preventDefault();
+      navTo(node.dataset.nav);
+    });
+  });
+
+  /* ── Cart ────────────────────────────────────────────────── */
+  const cartBadge = $('#cartBadge');
+  let cart = 0;
+  const addToCart = () => {
+    cart += 1;
+    cartBadge.textContent = String(cart);
+    cartBadge.hidden = false;
+  };
+
+  /* ── Product grid ────────────────────────────────────────── */
+  const grid = $('#productGrid');
+  PRODUCTS.forEach((p, i) => {
+    const overlay = el('div', { class: 'card__overlay' },
+      el('div', { class: 'card__age',   text: '熟成 ' + p.age }),
+      el('div', { class: 'card__notes', text: p.notesLine }),
+      el('div', { class: 'card__more',  text: '詳細を見る →' })
+    );
+
+    const media = el('div', { class: 'card__media' },
+      photo(p.img, p.ph, p.creditName, p.creditHref),
+      overlay
+    );
+    if (p.badge) media.append(el('div', { class: 'card__badge', text: p.badge }));
+
+    const card = el('div', { class: 'card', tabindex: '0', role: 'button', 'aria-label': p.name + '（' + p.jp + '）' },
+      media,
+      el('div', { class: 'card__info' },
+        el('div', { class: 'card__name',  text: p.name }),
+        el('div', { class: 'card__jp',    text: p.jp }),
+        el('div', { class: 'card__price', text: p.price })
+      )
+    );
+    card.addEventListener('click', () => openDetail(i));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(i); }
+    });
+    grid.append(card);
+  });
+
+  /* ── Product-detail modal ────────────────────────────────── */
+  const detail = $('#detail');
+  let addedTimer = null;
+  let lastFocused = null;
+
+  const noteRow = (label, value) =>
+    el('div', { class: 'detail__note-row' },
+      el('span', { class: 'detail__note-label', text: label }),
+      el('span', { class: 'detail__note-val',   text: value })
+    );
+
+  function openDetail(index) {
+    const p = PRODUCTS[index];
+    lastFocused = document.activeElement;
+    clearTimeout(addedTimer);
+
+    const added = el('p', { class: 'detail__added', text: 'カートに追加しました。', hidden: true });
+
+    const buyBtn = el('button', { class: 'btn btn--solid btn--sm', text: 'カートに入れる' });
+    buyBtn.addEventListener('click', () => {
+      addToCart();
+      added.hidden = false;
+      clearTimeout(addedTimer);
+      addedTimer = setTimeout(() => { added.hidden = true; }, 2200);
+    });
+
+    const price = el('div', { class: 'detail__price' });
+    price.append(p.price + ' ');
+    price.append(el('small', { text: '（税込）' }));
+
+    const card = el('div', { class: 'detail__card' },
+      el('button', { class: 'detail__close', 'aria-label': '閉じる', text: '×', onclick: closeDetail }),
+      el('div', { class: 'detail__media' }, photo(p.img, 'ボトル写真（' + p.name + '）', p.creditName, p.creditHref)),
+      el('div', { class: 'detail__body' },
+        el('div', { class: 'detail__en',   text: 'VELADA — ' + p.en }),
+        el('h3',  { class: 'detail__name', text: p.name }),
+        el('div', { class: 'detail__meta', text: p.jp + ' ／ 熟成 ' + p.age + ' ／ 750ml ・ 40%' }),
+        el('p',   { class: 'detail__desc', text: p.desc }),
+        el('div', { class: 'detail__notes' },
+          noteRow('香り', p.aroma),
+          noteRow('味わい', p.palate),
+          noteRow('余韻', p.finish)
+        ),
+        el('div', { class: 'detail__buyrow' }, price, buyBtn),
+        added,
+        el('p', { class: 'detail__fine' },
+          '※ 桐箱入り・ギフトラッピング対応。国内送料無料。',
+          el('br'),
+          '※ 数量限定のため、お一人様3本までとさせていただきます。'
+        )
+      )
+    );
+
+    // Backdrop click closes; clicks inside the card do not.
+    card.addEventListener('click', (e) => e.stopPropagation());
+
+    detail.replaceChildren(card);
+    detail.hidden = false;
+    buyBtn.focus();
+  }
+
+  function closeDetail() {
+    detail.hidden = true;
+    detail.replaceChildren();
+    clearTimeout(addedTimer);
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+  }
+
+  detail.addEventListener('click', closeDetail); // backdrop
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !detail.hidden) closeDetail();
+  });
+
+  /* ── Members form (UI only) ──────────────────────────────── */
+  $('#membersForm').addEventListener('submit', (e) => e.preventDefault());
+})();
+
+</script>
+</body>
+</html>
