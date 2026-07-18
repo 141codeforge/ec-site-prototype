@@ -1,17 +1,24 @@
 <!DOCTYPE html>
+<!--
+  Single-file version of index.html (CSS/JS inlined).
+  Product photos are referenced from assets/img/, so keep this file
+  next to the assets/ folder (or replace the img paths) when sharing.
+-->
 <html lang="ja">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VELADA — 時が磨く、アガベの光。</title>
-<meta name="description" content="ハリスコ州ロス・アルトスの高地で八年をかけて育てたブルーアガベを、小さな蒸留所でゆっくりと蒸留し、オーク樽の静寂の中で熟成させる。ベラーダは、待つことを知る大人のためのアガベスピリッツです。">
+<title>Reserva de los González — ドン・フリオを生んだ一族が、家名を懸けて造るテキーラ。</title>
+<meta name="description" content="ドン・フリオ・テキーラ創業者の息子、エドゥアルド・ゴンサレスとフランシスコ・ゴンサレスが設立した「Reserva de los González（レセルバ・デ・ロス・ゴンサレス）」。ハリスコ州ロス・アルトスのアガベ畑へのトリビュートとして生まれた、100%ブルーアガベ・メキシコ国内限定流通のテキーラです（NOM 1518）。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   VELADA — Premium Tequila EC site
-   Recreated from the Claude Design prototype (Velada EC.dc.html)
+   RESERVA DE LOS GONZÁLEZ — Premium Tequila EC site
+   Layout recreated from the Claude Design prototype
+   (project/Velada EC.dc.html); brand rewritten for
+   Reserva de los González (NOM 1518, Jalisco).
    ============================================================ */
 
 :root {
@@ -157,9 +164,16 @@ input::placeholder { color: var(--muted-2); }
 }
 .gate__logo {
   font-family: var(--serif-display);
-  font-size: 34px;
+  font-size: 30px;
   letter-spacing: 0.32em;
   color: var(--gold);
+}
+.gate__logo span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  letter-spacing: 0.34em;
+  color: var(--gold-dim);
 }
 .gate__rule { width: 40px; height: 1px; background: rgba(200,164,94,0.5); margin: 22px auto; }
 .gate__q    { margin: 0 0 8px; font-size: 15px; letter-spacing: 0.12em; }
@@ -183,10 +197,25 @@ input::placeholder { color: var(--muted-2); }
 }
 .header__logo {
   font-family: var(--serif-display);
-  font-size: 22px;
-  letter-spacing: 0.3em;
+  font-size: 17px;
+  letter-spacing: 0.26em;
+  line-height: 1.25;
   color: var(--gold);
   cursor: pointer;
+}
+.header__logo span {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--gold-dim);
+  white-space: nowrap;
+}
+.navlink { white-space: nowrap; }
+@media (max-width: 560px) {
+  .header { padding: 12px 16px; }
+  .header__logo { font-size: 13px; letter-spacing: 0.18em; }
+  .header__logo span { font-size: 7px; letter-spacing: 0.22em; }
+  .header__nav { font-size: 11px; letter-spacing: 0.06em; gap: 12px; }
 }
 .header__nav {
   display: flex;
@@ -243,10 +272,17 @@ input::placeholder { color: var(--muted-2); }
   margin: 0;
   font-family: var(--serif-display);
   font-weight: 500;
-  font-size: clamp(64px, 9vw, 128px);
+  font-size: clamp(56px, 8vw, 112px);
   line-height: 0.95;
   letter-spacing: 0.08em;
   color: var(--text);
+}
+.hero__title-sub {
+  display: block;
+  margin-top: 14px;
+  font-size: clamp(20px, 2.8vw, 38px);
+  letter-spacing: 0.3em;
+  color: var(--gold);
 }
 .hero__tagline {
   margin: 28px 0 0;
@@ -266,6 +302,28 @@ input::placeholder { color: var(--muted-2); }
 .hero__media {
   position: relative;
   height: clamp(420px, 62vh, 640px);
+}
+
+.hero__stage {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(20px, 4vw, 48px);
+  padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(40px, 6vw, 64px);
+  background: linear-gradient(180deg, #0a0a12, #14141f);
+  border: 1px solid var(--line);
+}
+.hero__bottle {
+  height: 100%;
+  max-width: 40%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
+}
+.hero__bottle--lead {
+  transform: scale(1.04);
+  transform-origin: bottom center;
 }
 
 /* ── Story ───────────────────────────────────────────────── */
@@ -323,6 +381,55 @@ input::placeholder { color: var(--muted-2); }
 
 .card__media { position: relative; height: 320px; }
 .card__media .photo { position: absolute; inset: 0; }
+
+/* Product shots are transparent WebPs — never crop them, let CSS paint the mood. */
+.photo--product { display: flex; align-items: flex-end; justify-content: center; }
+.photo--product img {
+  width: auto;
+  max-width: 70%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  padding: 24px 0 28px;
+  filter: drop-shadow(0 18px 28px rgba(0,0,0,0.5));
+}
+.photo--reposado {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 28%, rgba(255,255,255,0.08), transparent 70%),
+    linear-gradient(180deg, #3a5a42, #2d4a34 55%, #1a2e20);
+}
+.photo--anejo {
+  background:
+    radial-gradient(ellipse 85% 55% at 50% 30%, rgba(200,164,94,0.32), rgba(200,164,94,0.08) 55%, transparent 75%),
+    linear-gradient(180deg, #14100a, #060504);
+}
+
+/* Coming-soon cards */
+.card--soon { cursor: default; }
+.card--soon:hover { border-color: rgba(200,164,94,0.16); }
+.card--soon .photo img { filter: grayscale(0.7) brightness(0.45); }
+.card__soon-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,8,5,0.35);
+  pointer-events: none;
+}
+.card__soon-overlay span {
+  font-family: var(--serif-display);
+  font-size: 15px;
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  color: var(--gold);
+  border: 1px solid rgba(200,164,94,0.45);
+  padding: 10px 18px;
+  background: rgba(14,12,8,0.6);
+  backdrop-filter: blur(3px);
+}
+.card--soon .card__price { color: var(--muted); letter-spacing: 0.14em; }
 
 .card__overlay {
   position: absolute;
@@ -401,6 +508,32 @@ input::placeholder { color: var(--muted-2); }
 .detail__close:hover { color: var(--text); }
 .detail__media { min-height: 380px; background: var(--img-bg); position: relative; }
 .detail__media .photo { position: absolute; inset: 0; }
+
+.detail__media--stack { display: flex; flex-direction: column; }
+/* Explicit height: the main photo's contained <img> sizes against it. */
+.detail__media--stack .photo { position: static; flex: none; height: clamp(300px, 48vh, 460px); }
+.detail__gallery {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(0,0,0,0.35);
+  border-top: 1px solid var(--line);
+}
+.detail__gallery .photo {
+  flex: 1;
+  min-height: 0;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0805;
+}
+.detail__gallery img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
 .detail__body { padding: clamp(28px, 4vw, 48px); }
 .detail__en   { font-size: 11px; letter-spacing: 0.3em; color: var(--gold-dim); }
 .detail__name {
@@ -443,7 +576,29 @@ input::placeholder { color: var(--muted-2); }
   padding: clamp(80px, 11vw, 150px) clamp(24px, 6vw, 96px);
   border-top: 1px solid var(--line);
   background: linear-gradient(180deg, #0e0c08, #141008 55%, #0e0c08);
-  text-align: center;
+}
+.members__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(36px, 6vw, 88px);
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.members__visual {
+  margin: 0;
+  height: clamp(340px, 44vw, 480px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: radial-gradient(ellipse 75% 55% at 50% 40%, rgba(200,164,94,0.2), rgba(200,164,94,0.05) 55%, transparent 78%);
+}
+.members__visual img {
+  height: 96%;
+  max-width: 80%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
 }
 .members__title {
   margin: 20px 0 0;
@@ -453,7 +608,7 @@ input::placeholder { color: var(--muted-2); }
   letter-spacing: 0.08em;
 }
 .members__lead {
-  margin: 24px auto 0;
+  margin: 24px 0 0;
   max-width: 52ch;
   font-size: 14px;
   line-height: 2.3;
@@ -463,7 +618,6 @@ input::placeholder { color: var(--muted-2); }
 .members__form {
   display: flex;
   gap: 12px;
-  justify-content: center;
   flex-wrap: wrap;
   margin-top: 38px;
 }
@@ -491,7 +645,8 @@ input::placeholder { color: var(--muted-2); }
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 36px;
 }
-.footer__logo { font-family: var(--serif-display); font-size: 24px; letter-spacing: 0.3em; color: var(--gold); }
+.footer__logo { font-family: var(--serif-display); font-size: 20px; letter-spacing: 0.3em; color: var(--gold); }
+.footer__logo span { display: block; margin-top: 4px; font-size: 11px; letter-spacing: 0.32em; color: var(--gold-dim); }
 .footer__addr { margin: 16px 0 0; font-size: 12px; line-height: 2.1; color: var(--muted); }
 .footer__col  { font-size: 13px; line-height: 2.6; letter-spacing: 0.1em; }
 .footer__label{ font-size: 11px; letter-spacing: 0.28em; color: var(--gold-dim); margin-bottom: 10px; }
@@ -503,7 +658,6 @@ input::placeholder { color: var(--muted-2); }
   line-height: 2;
   color: var(--muted-2);
 }
-
 </style>
 </head>
 <body>
@@ -511,7 +665,7 @@ input::placeholder { color: var(--muted-2); }
   <!-- ── 年齢確認モーダル ─────────────────────────────────── -->
   <div class="gate" id="gate" aria-modal="true" role="dialog" aria-label="年齢確認">
     <div class="gate__card">
-      <div class="gate__logo">VELADA</div>
+      <div class="gate__logo">RESERVA<span>DE LOS GONZÁLEZ</span></div>
       <div class="gate__rule"></div>
       <p class="gate__q">お客様は20歳以上ですか？</p>
       <p class="gate__note">このサイトはアルコール飲料を取り扱っています。<br>20歳未満の方はご覧いただけません。</p>
@@ -525,7 +679,7 @@ input::placeholder { color: var(--muted-2); }
 
   <!-- ── ヘッダー ─────────────────────────────────────────── -->
   <header class="header">
-    <div class="header__logo" data-nav="top">VELADA</div>
+    <div class="header__logo" data-nav="top">RESERVA<span>DE LOS GONZÁLEZ</span></div>
     <nav class="header__nav">
       <span class="navlink" data-nav="story">ストーリー</span>
       <span class="navlink" data-nav="collection">コレクション</span>
@@ -541,35 +695,35 @@ input::placeholder { color: var(--muted-2); }
   <section class="hero" aria-label="ヒーロー">
     <div class="hero__glow" aria-hidden="true"></div>
     <div class="hero__copy fade-up">
-      <p class="eyebrow">AGAVE AZUL 100% — LOS ALTOS, JALISCO</p>
-      <h1 class="hero__title">VELADA</h1>
-      <p class="hero__tagline">時が磨く、アガベの光。</p>
-      <p class="hero__lead">ハリスコ州ロス・アルトスの高地で八年をかけて育てたブルーアガベを、小さな蒸留所でゆっくりと蒸留し、オーク樽の静寂の中で熟成させる。ベラーダは、待つことを知る大人のためのアガベスピリッツです。</p>
+      <p class="eyebrow">100% DE AGAVE AZUL — NOM 1518, JALISCO</p>
+      <h1 class="hero__title">RESERVA<span class="hero__title-sub">DE LOS GONZÁLEZ</span></h1>
+      <p class="hero__tagline">ドン・フリオを生んだ一族が、家名を懸けて造る、メキシコ国内限定のテキーラ。</p>
+      <p class="hero__lead">ドン・フリオ・テキーラの創業者ドン・フリオ・ゴンサレスの息子、エドゥアルド・ゴンサレスとフランシスコ・ゴンサレスが設立した「レセルバ・デ・ロス・ゴンサレス」。一族はドン・フリオブランドの売却を経て、あらためて家名を冠したテキーラで伝統を受け継ぎます。ハリスコ州ロス・アルトス、アトトニルコのアガベ畑へのトリビュートとして生まれた、現在メキシコ国内でのみ流通する一本です。</p>
       <button class="btn btn--outline hero__cta" data-nav="collection">コレクションを見る</button>
     </div>
     <div class="hero__media fade-up fade-up--slow">
-      <figure class="photo photo--fill">
-        <img src="https://images.unsplash.com/photo-1678667593664-792513e9ff7b?q=80&w=1400&auto=format&fit=crop" alt="ボトルのメインビジュアル" loading="eager">
-        <span class="credit"><a href="https://unsplash.com/@capture_it?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Hector Reyes</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
-      </figure>
+      <div class="hero__stage">
+        <img class="hero__bottle" src="assets/img/reposado_bottle.webp" alt="Reserva de los González REPOSADO ボトル" loading="eager">
+        <img class="hero__bottle hero__bottle--lead" src="assets/img/anejo_bottle.webp" alt="Reserva de los González AÑEJO ボトル" loading="eager">
+      </div>
     </div>
   </section>
 
   <!-- ── ブランドストーリー ──────────────────────────────── -->
   <section class="section story" id="story" aria-label="ブランドストーリー">
     <p class="eyebrow">OUR STORY</p>
-    <h2 class="section__title">大地から、樽の静寂へ。</h2>
+    <h2 class="section__title">受け継がれる家名、変わらぬ造り。</h2>
     <div class="story__list">
 
       <article class="story__row">
         <div class="story__text" style="order:1">
-          <div class="story__kicker">01 — CULTIVO</div>
-          <h3 class="story__heading">八年を土に委ねる</h3>
-          <p class="story__body">標高2,000メートル、ロス・アルトスの赤土。ヒマドール（アガベ収穫職人）は、糖度が頂点に達する八年目の瞬間だけを待ちます。早すぎても、遅すぎてもならない。畑仕事は、時間との静かな対話です。</p>
+          <div class="story__kicker">01 — HERENCIA</div>
+          <h3 class="story__heading">ドン・フリオの一族、新しい章へ</h3>
+          <p class="story__body">レセルバ・デ・ロス・ゴンサレスを設立したのは、ドン・フリオ・テキーラの創業者ドン・フリオ・ゴンサレスの息子、エドゥアルド・ゴンサレスとフランシスコ・ゴンサレス。一族はドン・フリオブランドを創業し、のちに売却しました。その歴史の先で、あらためて家名を冠したブランドとして伝統を継承しています。ブランドは、ハリスコ州ロス・アルトス（アトトニルコ地域）のアガベ畑へのトリビュートとして誕生しました。</p>
         </div>
         <div class="story__media" style="order:2">
           <figure class="photo photo--fill">
-            <img src="https://images.unsplash.com/photo-1706888135824-20ec9010b7bc?q=80&w=1400&auto=format&fit=crop" alt="アガベ畑の写真" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1706888135824-20ec9010b7bc?q=80&w=1400&auto=format&fit=crop" alt="アガベ畑の写真（イメージ）" loading="lazy">
             <span class="credit"><a href="https://unsplash.com/@scottywatty?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Scott Tobin</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
           </figure>
         </div>
@@ -578,12 +732,12 @@ input::placeholder { color: var(--muted-2); }
       <article class="story__row">
         <div class="story__text" style="order:2">
           <div class="story__kicker">02 — DESTILACIÓN</div>
-          <h3 class="story__heading">石窯と銅、変わらぬ手仕事</h3>
-          <p class="story__body">収穫したピニャは石窯で三日かけてゆっくりと蒸し上げ、小さな銅製ポットスチルで二度蒸留します。効率よりも輪郭を。一度に仕込むのは、わずか数百リットルです。</p>
+          <h3 class="story__heading">石窯、ローラーミル、二度の蒸留</h3>
+          <p class="story__body">原料はハリスコ州の100%ブルーアガベ。石窯（レンガ窯）でじっくりと加熱し、ローラーミルで搾汁します。仕込みには深井戸から汲み上げた水を使い、銅コイルを備えたスチルで二度蒸留。工程のひとつひとつを丁寧に積み重ねる、実直な造りです。</p>
         </div>
         <div class="story__media" style="order:1">
           <figure class="photo photo--fill">
-            <img src="https://images.unsplash.com/photo-1683313890724-ec2df503a9d6?q=80&w=1400&auto=format&fit=crop" alt="蒸留所・銅製ポットスチルの写真" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1683313890724-ec2df503a9d6?q=80&w=1400&auto=format&fit=crop" alt="蒸留所の写真（イメージ）" loading="lazy">
             <span class="credit"><a href="https://unsplash.com/@danicajean?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Danica Hennig</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
           </figure>
         </div>
@@ -592,12 +746,13 @@ input::placeholder { color: var(--muted-2); }
       <article class="story__row">
         <div class="story__text" style="order:1">
           <div class="story__kicker">03 — AÑEJAMIENTO</div>
-          <h3 class="story__heading">樽の静寂の中で</h3>
-          <p class="story__body">地下熟成庫に眠るオーク樽の中で、スピリッツは琥珀色の深みをまといます。十ヶ月、二年、五年、八年——熟成年数ごとに異なる表情は、そのまま時間の味わいです。</p>
+          <h3 class="story__heading">オーク樽の中で、それぞれの時間を</h3>
+          <!-- 仮スペック: 要蒸留所確認（熟成期間） -->
+          <p class="story__body">蒸留を終えたテキーラは、オーク樽で熟成させます。レポサドは6ヶ月、アネホは24ヶ月。エクストラアネホ・クリスタリーノは36ヶ月以上の熟成の後にろ過を施し、澄んだ液色に仕上げます。海外の愛好家の間では、加熱アガベやキャラメル、バタースコッチ、オーク、黒胡椒、蜂蜜、バニラを思わせる風味が語られています。</p>
         </div>
         <div class="story__media" style="order:2">
           <figure class="photo photo--fill">
-            <img src="https://images.unsplash.com/photo-1638286629485-bb417ced482e?q=80&w=1400&auto=format&fit=crop" alt="熟成庫・オーク樽の写真" loading="lazy">
+            <img src="https://images.unsplash.com/photo-1638286629485-bb417ced482e?q=80&w=1400&auto=format&fit=crop" alt="熟成庫・オーク樽の写真（イメージ）" loading="lazy">
             <span class="credit"><a href="https://unsplash.com/@kurti?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Kurt Liebhaeuser</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
           </figure>
         </div>
@@ -616,24 +771,32 @@ input::placeholder { color: var(--muted-2); }
   <!-- ── 商品詳細モーダル ────────────────────────────────── -->
   <div class="detail" id="detail" aria-modal="true" role="dialog" aria-label="商品詳細" hidden></div>
 
-  <!-- ── 会員先行販売 ────────────────────────────────────── -->
-  <section class="section members" id="members" aria-label="会員先行販売">
-    <p class="eyebrow">MEMBERS ONLY</p>
-    <h2 class="members__title">GRAN RESERVA 先行販売</h2>
-    <p class="members__lead">樽番号を刻んだ八年熟成のエクストラアネホ「グラン・レセルバ」は、年間三百本のみの限定生産。会員のお客様に、一般発売に先立ちご案内いたします。</p>
-    <form class="members__form" id="membersForm" novalidate>
-      <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
-      <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
-    </form>
-    <p class="members__fine">ご登録には20歳以上であることの確認が必要です。</p>
+  <!-- ── 会員先行案内 ────────────────────────────────────── -->
+  <section class="section members" id="members" aria-label="会員先行案内">
+    <div class="members__grid">
+      <figure class="members__visual">
+        <img src="assets/img/anejo_box.webp" alt="AÑEJO 化粧箱" loading="lazy">
+      </figure>
+      <div class="members__content">
+        <p class="eyebrow">MEMBERS ONLY</p>
+        <h2 class="members__title">EXTRA AÑEJO CRISTALINO 先行案内</h2>
+        <!-- 仮スペック: 要蒸留所確認（熟成期間・ろ過工程の詳細） -->
+        <p class="members__lead">36ヶ月以上の熟成を経てろ過される「エクストラアネホ・クリスタリーノ」は、現在メキシコ国内でのみ流通しています。日本での取り扱い開始の際には、ご登録のお客様へ入荷情報をいち早くお届けします。</p>
+        <form class="members__form" id="membersForm" novalidate>
+          <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
+          <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
+        </form>
+        <p class="members__fine">ご登録には20歳以上であることの確認が必要です。</p>
+      </div>
+    </div>
   </section>
 
   <!-- ── フッター ─────────────────────────────────────────── -->
   <footer class="footer" aria-label="フッター">
     <div class="footer__grid">
       <div>
-        <div class="footer__logo">VELADA</div>
-        <p class="footer__addr">Casa Velada Destilería<br>Los Altos, Jalisco, México<br>輸入・販売：ベラーダ・ジャパン株式会社</p>
+        <div class="footer__logo">RESERVA<span>DE LOS GONZÁLEZ</span></div>
+        <p class="footer__addr">Tequila Casa de los González, S.A. de C.V.（NOM 1518）<br>Km.10 Carr. Atotonilco-Ayotlán, Ayotlán, Jalisco, México<br>輸入・販売：（調整中）</p>
       </div>
       <div class="footer__col">
         <div class="footer__label">BRAND</div>
@@ -648,12 +811,12 @@ input::placeholder { color: var(--muted-2); }
         <div><a href="#">Newsletter</a></div>
       </div>
     </div>
-    <p class="footer__legal">飲酒は20歳になってから。飲酒運転は法律で禁止されています。妊娠中や授乳期の飲酒は、胎児・乳児の発育に悪影響を与えるおそれがあります。お酒は適量を。<br>© 2026 Casa Velada Destilería. All rights reserved.</p>
+    <p class="footer__legal">飲酒は20歳になってから。飲酒運転は法律で禁止されています。妊娠中や授乳期の飲酒は、胎児・乳児の発育に悪影響を与えるおそれがあります。お酒は適量を。<br>本サイトにおけるドン・フリオへの言及は、創業家の歴史に関する事実の記載であり、現在の「Don Julio」ブランドとの提携・関係を示すものではありません。<br>© 2026 Tequila Casa de los González, S.A. de C.V. All rights reserved.</p>
   </footer>
 
   <script>
 /* ============================================================
-   VELADA — interactions
+   RESERVA DE LOS GONZÁLEZ — interactions
    Age gate · nav scroll · product grid · detail modal · cart
    ============================================================ */
 (() => {
@@ -662,55 +825,61 @@ input::placeholder { color: var(--muted-2); }
   const UTM = '?utm_source=claude_design&utm_medium=referral';
   const UNSPLASH_HOME = 'https://unsplash.com/' + UTM;
 
-  /* ── Product data (mirrors the prototype's `data` array) ── */
+  /* ── Product data ─────────────────────────────────────────
+     熟成期間は仮スペック（要蒸留所確認）。価格は参考の仮値で、
+     輸入条件の確定後に要調整。風味の記述は海外レビューの傾向を
+     要約したもの（直接引用ではない）。                        ── */
   const PRODUCTS = [
     {
+      slot: 'blanco', name: 'BLANCO', en: 'BLANCO', jp: 'ブランコ',
+      age: '未熟成', badge: '', comingSoon: true,
+      img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
+      ph: 'BLANCO ボトル写真（準備中）',
+      notesLine: '加熱アガベ ／ 黒胡椒 ／ 蜂蜜'
+    },
+    {
       slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
-      age: '10ヶ月', price: '¥18,700', badge: '',
-      img: 'https://images.unsplash.com/photo-1698288547419-407ca6bafe2a?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'Jon Lanzieri', creditHref: 'https://unsplash.com/@jonlanzieri',
+      age: 'オーク樽 6ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
+      vol: '700ml', abv: '36%',
+      price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
+      badge: '',
+      img: 'assets/img/reposado_bottle_alt.webp',
+      tone: 'reposado',
       ph: 'REPOSADO ボトル写真',
-      notesLine: '蜂蜜 ／ バニラ ／ 焼いた青アガベ',
-      aroma: '蜂蜜、バニラ、かすかな柑橘の花',
-      palate: '焼いた青アガベの甘み、軽いオークのスパイス',
-      finish: '穏やかで澄んだ、ミネラルを感じる余韻',
-      desc: 'アメリカンオークの旧バーボン樽で10ヶ月。アガベ本来の輝きに、樽由来のやわらかな甘みがひと筆加わった、蒸留所の原点となる一本です。'
+      notesLine: '蜂蜜 ／ バニラ ／ 加熱アガベ',
+      aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
+      palate: '加熱アガベの甘みに、穏やかなオーク',
+      finish: '黒胡椒のスパイスがほどよく締める余韻',
+      desc: 'オーク樽で6ヶ月熟成させたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
     },
     {
       slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
-      age: '26ヶ月', price: '¥36,300', badge: '',
-      img: 'https://images.unsplash.com/photo-1718881949298-b658a109bf0b?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'SJ 📸', creditHref: 'https://unsplash.com/@uxsj_ph',
+      age: 'オーク樽 24ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
+      vol: '800ml', abv: '38%',
+      price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
+      badge: '',
+      img: 'assets/img/anejo_bottle_alt.webp',
+      tone: 'anejo',
       ph: 'AÑEJO ボトル写真',
-      notesLine: 'キャラメル ／ オーク ／ ドライフルーツ',
-      aroma: 'キャラメル、トーストしたオーク、オレンジピール',
-      palate: 'ドライフルーツの凝縮感と、しなやかなタンニン',
-      finish: '長く温かい、シガーを思わせる余韻',
-      desc: 'フレンチオークとアメリカンオークを使い分け、26ヶ月の熟成を経て瓶詰め。ウイスキー愛好家にこそ味わっていただきたい、深みのあるアネホです。'
+      gallery: [
+        { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
+        { src: 'assets/img/anejo_label_closeup.webp', alt: 'AÑEJO ラベル' }
+      ],
+      notesLine: 'キャラメル ／ バタースコッチ ／ オーク',
+      aroma: 'キャラメル、バタースコッチ、トーストしたオーク',
+      palate: '加熱アガベの甘みに、オークの厚みが重なる',
+      finish: 'バニラと黒胡椒がゆっくりと引いていく余韻',
+      desc: 'オーク樽で24ヶ月熟成させたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
     },
     {
-      slot: 'extra-anejo', name: 'EXTRA AÑEJO', en: 'EXTRA AÑEJO', jp: 'エクストラアネホ',
-      age: '5年', price: '¥79,200', badge: '小ロット',
+      slot: 'extra-anejo-cristalino', name: 'EXTRA AÑEJO CRISTALINO', en: 'EXTRA AÑEJO CRISTALINO', jp: 'エクストラアネホ・クリスタリーノ',
+      age: '36ヶ月以上熟成・ろ過', /* 仮スペック: 要蒸留所確認 */
+      badge: '', comingSoon: true,
       img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
-      ph: 'EXTRA AÑEJO ボトル写真',
-      notesLine: 'カカオ ／ タバコリーフ ／ ベーキングスパイス',
-      aroma: 'ダークカカオ、タバコリーフ、乾いた革',
-      palate: 'ビターチョコレートとベーキングスパイスの重層',
-      finish: '静かに続く、ビロードのような長い余韻',
-      desc: '五年の歳月を樽の中で過ごした、当蒸留所の粋。一樽ごとに瓶詰めされ、ラベルには樽番号が手書きで記されます。特別な夜のための一本に。'
-    },
-    {
-      slot: 'gran-reserva', name: 'GRAN RESERVA', en: 'EXTRA AÑEJO — GRAN RESERVA', jp: 'グラン・レセルバ ／ 8年熟成',
-      age: '8年', price: '¥165,000', badge: '会員限定 300本',
-      img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
-      ph: 'GRAN RESERVA ボトル写真',
-      notesLine: '黒糖 ／ 熟した無花果 ／ 古樽の香気',
-      aroma: '黒糖、熟した無花果、白檀',
-      palate: '蜜のような粘性と、幾重にも折り重なる樽香',
-      finish: 'いつまでも消えない、瞑想的な余韻',
-      desc: '八年熟成、年間三百本のみ。職人が一本ずつ吹いたクリスタルボトルを桐箱に納めてお届けします。贈答に、そして人生の節目に。'
+      ph: 'EXTRA AÑEJO CRISTALINO ボトル写真（準備中）',
+      notesLine: 'バニラ ／ オーク ／ 加熱アガベ'
     }
   ];
 
@@ -743,11 +912,15 @@ input::placeholder { color: var(--muted-2); }
     return span;
   };
 
-  const photo = (src, alt, name, href) =>
-    el('figure', { class: 'photo photo--fill' },
-      el('img', { src, alt, loading: 'lazy' }),
-      creditChip(name, href)
+  // Local product shots (transparent WebP) get a tone class for their CSS
+  // backdrop and carry no credit; Unsplash sources keep their credit chip.
+  const photo = (p, alt) => {
+    const tone = p.tone ? ' photo--product photo--' + p.tone : '';
+    return el('figure', { class: 'photo photo--fill' + tone },
+      el('img', { src: p.img, alt, loading: 'lazy' }),
+      p.creditName ? creditChip(p.creditName, p.creditHref) : null
     );
+  };
 
   /* ── Age-verification gate ───────────────────────────────── */
   const gate = $('#gate');
@@ -780,29 +953,37 @@ input::placeholder { color: var(--muted-2); }
   const grid = $('#productGrid');
   PRODUCTS.forEach((p, i) => {
     const overlay = el('div', { class: 'card__overlay' },
-      el('div', { class: 'card__age',   text: '熟成 ' + p.age }),
+      el('div', { class: 'card__age',   text: p.age }),
       el('div', { class: 'card__notes', text: p.notesLine }),
-      el('div', { class: 'card__more',  text: '詳細を見る →' })
+      p.comingSoon ? null : el('div', { class: 'card__more', text: '詳細を見る →' })
     );
 
     const media = el('div', { class: 'card__media' },
-      photo(p.img, p.ph, p.creditName, p.creditHref),
+      photo(p, p.ph),
       overlay
     );
+    if (p.comingSoon) {
+      media.append(el('div', { class: 'card__soon-overlay' }, el('span', { text: 'COMING SOON' })));
+    }
     if (p.badge) media.append(el('div', { class: 'card__badge', text: p.badge }));
 
-    const card = el('div', { class: 'card', tabindex: '0', role: 'button', 'aria-label': p.name + '（' + p.jp + '）' },
+    const card = el('div', { class: 'card' + (p.comingSoon ? ' card--soon' : '') },
       media,
       el('div', { class: 'card__info' },
         el('div', { class: 'card__name',  text: p.name }),
         el('div', { class: 'card__jp',    text: p.jp }),
-        el('div', { class: 'card__price', text: p.price })
+        el('div', { class: 'card__price', text: p.comingSoon ? '近日入荷予定' : p.price })
       )
     );
-    card.addEventListener('click', () => openDetail(i));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(i); }
-    });
+    if (!p.comingSoon) {
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', p.name + '（' + p.jp + '）');
+      card.addEventListener('click', () => openDetail(i));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(i); }
+      });
+    }
     grid.append(card);
   });
 
@@ -834,15 +1015,22 @@ input::placeholder { color: var(--muted-2); }
 
     const price = el('div', { class: 'detail__price' });
     price.append(p.price + ' ');
-    price.append(el('small', { text: '（税込）' }));
+    price.append(el('small', { text: '（税込・参考価格）' }));
 
     const card = el('div', { class: 'detail__card' },
       el('button', { class: 'detail__close', 'aria-label': '閉じる', text: '×', onclick: closeDetail }),
-      el('div', { class: 'detail__media' }, photo(p.img, 'ボトル写真（' + p.name + '）', p.creditName, p.creditHref)),
+      el('div', { class: 'detail__media' + (p.gallery ? ' detail__media--stack' : '') },
+        photo(p, 'ボトル写真（' + p.name + '）'),
+        p.gallery ? el('div', { class: 'detail__gallery' },
+          ...p.gallery.map((g) =>
+            el('figure', { class: 'photo' }, el('img', { src: g.src, alt: g.alt, loading: 'lazy' }))
+          )
+        ) : null
+      ),
       el('div', { class: 'detail__body' },
-        el('div', { class: 'detail__en',   text: 'VELADA — ' + p.en }),
+        el('div', { class: 'detail__en',   text: 'RESERVA DE LOS GONZÁLEZ — ' + p.en }),
         el('h3',  { class: 'detail__name', text: p.name }),
-        el('div', { class: 'detail__meta', text: p.jp + ' ／ 熟成 ' + p.age + ' ／ 750ml ・ 40%' }),
+        el('div', { class: 'detail__meta', text: p.jp + ' ／ ' + p.age + ' ／ ' + p.vol + ' ・ ' + p.abv }),
         el('p',   { class: 'detail__desc', text: p.desc }),
         el('div', { class: 'detail__notes' },
           noteRow('香り', p.aroma),
@@ -852,9 +1040,9 @@ input::placeholder { color: var(--muted-2); }
         el('div', { class: 'detail__buyrow' }, price, buyBtn),
         added,
         el('p', { class: 'detail__fine' },
-          '※ 桐箱入り・ギフトラッピング対応。国内送料無料。',
+          '※ 表示価格・仕様は参考値です。輸入条件の確定後に変更となる場合があります。',
           el('br'),
-          '※ 数量限定のため、お一人様3本までとさせていただきます。'
+          '※ 本商品は現在メキシコ国内限定流通です（日本未上陸）。'
         )
       )
     );
@@ -882,7 +1070,6 @@ input::placeholder { color: var(--muted-2); }
   /* ── Members form (UI only) ──────────────────────────────── */
   $('#membersForm').addEventListener('submit', (e) => e.preventDefault());
 })();
-
 </script>
 </body>
 </html>
