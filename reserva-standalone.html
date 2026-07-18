@@ -140,6 +140,41 @@ input::placeholder { color: var(--muted-2); }
 .credit a { color: inherit; text-decoration: none; }
 .credit a:hover, .credit a:focus-visible { text-decoration: underline; }
 
+/* ── Bottle stage (members セクションで使用) ──────────────────
+   元画像は高さ1024pxしかないため、表示は最大でも440pxに制限し
+   拡大しない。存在感は余白・スポットライト・接地影・床反射で出す。
+   .stage-bottle はボトル1本を包むラッパー:
+   - ::before … 楕円の接地影（幅はボトルの1.4倍）
+   - img      … drop-shadow + 床反射（-webkit-box-reflect）      */
+.stage-bottle {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0;
+  line-height: 0;
+}
+.stage-bottle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  width: 140%;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  filter: blur(18px);
+}
+.stage-bottle img {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
+  -webkit-box-reflect: below 1px linear-gradient(transparent 78%, rgba(255,255,255,0.10));
+}
+
 /* ── Age-verification modal ──────────────────────────────── */
 .gate {
   position: fixed;
@@ -301,29 +336,29 @@ input::placeholder { color: var(--muted-2); }
 .hero__cta { margin-top: 40px; }
 .hero__media {
   position: relative;
-  height: clamp(420px, 62vh, 640px);
+  height: clamp(540px, 66vh, 640px);
 }
 
-.hero__stage {
+/* 実写ヒーロー(1600x900、背景は暗部 #0a0705 のダークブラウン)。
+   被写体は中央付近にあるため cover + center で左右のみトリミングし、
+   ボトルの上下は切らない。 */
+.hero__photo {
+  position: relative;
+  margin: 0;
   height: 100%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: clamp(20px, 4vw, 48px);
-  padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(40px, 6vw, 64px);
-  background: linear-gradient(180deg, #0a0a12, #14141f);
+  overflow: hidden;
   border: 1px solid var(--line);
+  background: #0a0705;
 }
-.hero__bottle {
+.hero__photo img {
+  display: block;
+  width: 100%;
   height: 100%;
-  max-width: 40%;
-  object-fit: contain;
-  object-position: bottom;
-  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
+  object-fit: cover;
+  object-position: center;
 }
-.hero__bottle--lead {
-  transform: scale(1.04);
-  transform-origin: bottom center;
+@media (max-width: 560px) {
+  .hero__media { height: clamp(430px, 60vh, 500px); }
 }
 
 /* ── Story ───────────────────────────────────────────────── */
@@ -370,6 +405,7 @@ input::placeholder { color: var(--muted-2); }
   gap: clamp(20px, 3vw, 36px);
   margin-top: clamp(40px, 6vw, 72px);
 }
+.collection__fine { margin: 26px 0 0; font-size: 11px; text-align: center; color: var(--muted-2); }
 
 .card {
   cursor: pointer;
@@ -379,30 +415,12 @@ input::placeholder { color: var(--muted-2); }
 }
 .card:hover { border-color: rgba(200,164,94,0.5); }
 
-.card__media { position: relative; height: 320px; }
+.card__media { position: relative; height: 520px; }
 .card__media .photo { position: absolute; inset: 0; }
 
-/* Product shots are transparent WebPs — never crop them, let CSS paint the mood. */
-.photo--product { display: flex; align-items: flex-end; justify-content: center; }
-.photo--product img {
-  width: auto;
-  max-width: 70%;
-  height: 100%;
-  object-fit: contain;
-  object-position: bottom;
-  padding: 24px 0 28px;
-  filter: drop-shadow(0 18px 28px rgba(0,0,0,0.5));
-}
-.photo--reposado {
-  background:
-    radial-gradient(ellipse 90% 60% at 50% 28%, rgba(255,255,255,0.08), transparent 70%),
-    linear-gradient(180deg, #3a5a42, #2d4a34 55%, #1a2e20);
-}
-.photo--anejo {
-  background:
-    radial-gradient(ellipse 85% 55% at 50% 30%, rgba(200,164,94,0.32), rgba(200,164,94,0.08) 55%, transparent 75%),
-    linear-gradient(180deg, #14100a, #060504);
-}
+/* 商品カードの実写(900x1200, 3:4縦長・背景込み)。カード枠の比率が
+   3:4より縦長のときは cover + center で左右のみ切れる。画像側に
+   上下余白を確保してあるため、多少横長になってもボトルは切れない。 */
 
 /* Coming-soon cards */
 .card--soon { cursor: default; }
@@ -508,6 +526,10 @@ input::placeholder { color: var(--muted-2); }
 .detail__close:hover { color: var(--text); }
 .detail__media { min-height: 380px; background: var(--img-bg); position: relative; }
 .detail__media .photo { position: absolute; inset: 0; }
+/* 実写のメイン写真(3:4)は contain で全体を見せ、レターボックスの帯は
+   画像の最暗部(#0a0705)に合わせて馴染ませる。 */
+.detail__media > .photo { background: #0a0705; }
+.detail__media > .photo img { object-fit: contain; }
 
 .detail__media--stack { display: flex; flex-direction: column; }
 /* Explicit height: the main photo's contained <img> sizes against it. */
@@ -585,21 +607,18 @@ input::placeholder { color: var(--muted-2); }
   max-width: 1100px;
   margin: 0 auto;
 }
+/* 閉じた化粧箱をまっすぐ立てて小さめ(300px)に。演出はステージ共通。 */
 .members__visual {
   margin: 0;
-  height: clamp(340px, 44vw, 480px);
+  height: clamp(360px, 40vw, 430px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: radial-gradient(ellipse 75% 55% at 50% 40%, rgba(200,164,94,0.2), rgba(200,164,94,0.05) 55%, transparent 78%);
+  padding-bottom: 48px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 75% 55% at 50% 35%, rgba(212,175,55,0.14), transparent 75%);
 }
-.members__visual img {
-  height: 96%;
-  max-width: 80%;
-  object-fit: contain;
-  object-position: bottom;
-  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
-}
+.members__visual img { height: 300px; }
 .members__title {
   margin: 20px 0 0;
   font-family: var(--serif-display);
@@ -702,10 +721,9 @@ input::placeholder { color: var(--muted-2); }
       <button class="btn btn--outline hero__cta" data-nav="collection">コレクションを見る</button>
     </div>
     <div class="hero__media fade-up fade-up--slow">
-      <div class="hero__stage">
-        <img class="hero__bottle" src="assets/img/reposado_bottle.webp" alt="Reserva de los González REPOSADO ボトル" loading="eager">
-        <img class="hero__bottle hero__bottle--lead" src="assets/img/anejo_bottle.webp" alt="Reserva de los González AÑEJO ボトル" loading="eager">
-      </div>
+      <figure class="hero__photo">
+        <img src="assets/img/hero_anejo_v3.jpg" alt="Reserva de los González Añejo 800ml ボトルと化粧箱" loading="eager">
+      </figure>
     </div>
   </section>
 
@@ -747,8 +765,8 @@ input::placeholder { color: var(--muted-2); }
         <div class="story__text" style="order:1">
           <div class="story__kicker">03 — AÑEJAMIENTO</div>
           <h3 class="story__heading">オーク樽の中で、それぞれの時間を</h3>
-          <!-- 仮スペック: 要蒸留所確認（熟成期間） -->
-          <p class="story__body">蒸留を終えたテキーラは、オーク樽で熟成させます。レポサドは6ヶ月、アネホは24ヶ月。エクストラアネホ・クリスタリーノは36ヶ月以上の熟成の後にろ過を施し、澄んだ液色に仕上げます。海外の愛好家の間では、加熱アガベやキャラメル、バタースコッチ、オーク、黒胡椒、蜂蜜、バニラを思わせる風味が語られています。</p>
+          <!-- 熟成月数の実数値は非公表のため、CRT/NOM-006のカテゴリ規格で表記（実数値は要蒸留所確認） -->
+          <p class="story__body">蒸留を終えたテキーラは、オーク樽で熟成させます。テキーラの公的規格は、レポサドに2ヶ月以上、アネホに600L以下のオーク樽での1年以上、エクストラアネホに3年以上の熟成を定めています。クリスタリーノは熟成の後にろ過を施し、澄んだ液色に仕上げます。海外の愛好家の間では、加熱アガベやキャラメル、バタースコッチ、オーク、黒胡椒、蜂蜜、バニラを思わせる風味が語られています。</p>
         </div>
         <div class="story__media" style="order:2">
           <figure class="photo photo--fill">
@@ -766,6 +784,7 @@ input::placeholder { color: var(--muted-2); }
     <p class="eyebrow">COLLECTION</p>
     <h2 class="section__title">熟成が語る、四つの表情。</h2>
     <div class="collection__grid" id="productGrid"></div>
+    <p class="collection__fine">※ 表示価格は参考価格です（輸入条件により変動）。</p>
   </section>
 
   <!-- ── 商品詳細モーダル ────────────────────────────────── -->
@@ -775,13 +794,15 @@ input::placeholder { color: var(--muted-2); }
   <section class="section members" id="members" aria-label="会員先行案内">
     <div class="members__grid">
       <figure class="members__visual">
-        <img src="assets/img/anejo_box.webp" alt="AÑEJO 化粧箱" loading="lazy">
+        <span class="stage-bottle">
+          <img src="assets/img/anejo_box.webp" alt="AÑEJO 化粧箱" loading="lazy">
+        </span>
       </figure>
       <div class="members__content">
         <p class="eyebrow">MEMBERS ONLY</p>
         <h2 class="members__title">EXTRA AÑEJO CRISTALINO 先行案内</h2>
-        <!-- 仮スペック: 要蒸留所確認（熟成期間・ろ過工程の詳細） -->
-        <p class="members__lead">36ヶ月以上の熟成を経てろ過される「エクストラアネホ・クリスタリーノ」は、現在メキシコ国内でのみ流通しています。日本での取り扱い開始の際には、ご登録のお客様へ入荷情報をいち早くお届けします。</p>
+        <!-- 熟成月数の実数値・ろ過工程の詳細は非公表のため、規格ベースの表記（要蒸留所確認） -->
+        <p class="members__lead">公的規格で3年以上の樽熟成が定められたエクストラアネホをろ過して仕上げる「エクストラアネホ・クリスタリーノ」は、現在メキシコ国内でのみ流通しています。日本での取り扱い開始の際には、ご登録のお客様へ入荷情報をいち早くお届けします。</p>
         <form class="members__form" id="membersForm" novalidate>
           <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
           <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
@@ -796,7 +817,7 @@ input::placeholder { color: var(--muted-2); }
     <div class="footer__grid">
       <div>
         <div class="footer__logo">RESERVA<span>DE LOS GONZÁLEZ</span></div>
-        <p class="footer__addr">Tequila Casa de los González, S.A. de C.V.（NOM 1518）<br>Km.10 Carr. Atotonilco-Ayotlán, Ayotlán, Jalisco, México<br>輸入・販売：（調整中）</p>
+        <p class="footer__addr">Tequila Casa de los González, S.A. de C.V.（NOM 1518）<br>Km. 10 Carretera Atotonilco–Ayotlán, Jalisco, México<br>輸入・販売：（調整中）</p>
       </div>
       <div class="footer__col">
         <div class="footer__label">BRAND</div>
@@ -826,13 +847,16 @@ input::placeholder { color: var(--muted-2); }
   const UNSPLASH_HOME = 'https://unsplash.com/' + UTM;
 
   /* ── Product data ─────────────────────────────────────────
-     熟成期間は仮スペック（要蒸留所確認）。価格は参考の仮値で、
-     輸入条件の確定後に要調整。風味の記述は海外レビューの傾向を
-     要約したもの（直接引用ではない）。                        ── */
+     熟成期間: 蒸留所固有の実数値は非公表のため、CRT/NOM-006 の
+     カテゴリ規格（レポサド2ヶ月以上／アネホ1年以上／エクストラ
+     アネホ3年以上）で表記。実数値は要蒸留所確認。
+     価格: 参考価格（輸入条件により変動）。要蒸留所確認。
+     風味の記述は海外レビューの傾向を要約したもの（直接引用では
+     ない）。                                                  ── */
   const PRODUCTS = [
     {
       slot: 'blanco', name: 'BLANCO', en: 'BLANCO', jp: 'ブランコ',
-      age: '未熟成', badge: '', comingSoon: true,
+      age: 'ブランコ規格（熟成2ヶ月未満）', badge: '', comingSoon: true, /* 容量・度数・熟成有無は要蒸留所確認 */
       img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
       ph: 'BLANCO ボトル写真（準備中）',
@@ -840,28 +864,26 @@ input::placeholder { color: var(--muted-2); }
     },
     {
       slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
-      age: 'オーク樽 6ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
-      vol: '700ml', abv: '36%',
+      age: 'オーク樽熟成（規格 2ヶ月以上）', /* 実熟成月数は要蒸留所確認 */
+      vol: '700ml', abv: '36%', /* 実ボトルのラベル記載 */
       price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/reposado_bottle_alt.webp',
-      tone: 'reposado',
-      ph: 'REPOSADO ボトル写真',
+      img: 'assets/img/card_reposado_v3.jpg',
+      ph: 'Reserva de los González Reposado 700ml ボトル',
       notesLine: '蜂蜜 ／ バニラ ／ 加熱アガベ',
       aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
       palate: '加熱アガベの甘みに、穏やかなオーク',
       finish: '黒胡椒のスパイスがほどよく締める余韻',
-      desc: 'オーク樽で6ヶ月熟成させたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
+      desc: 'テキーラの公的規格でオーク樽2ヶ月以上の熟成が定められたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
     },
     {
       slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
-      age: 'オーク樽 24ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
-      vol: '800ml', abv: '38%',
+      age: 'オーク樽熟成（規格 1年以上）', /* 実熟成月数は要蒸留所確認 */
+      vol: '800ml', abv: '38%', /* 実ボトルのラベル記載 */
       price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/anejo_bottle_alt.webp',
-      tone: 'anejo',
-      ph: 'AÑEJO ボトル写真',
+      img: 'assets/img/card_anejo_v3.jpg',
+      ph: 'Reserva de los González Añejo 800ml ボトル',
       gallery: [
         { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
         { src: 'assets/img/anejo_label_closeup.webp', alt: 'AÑEJO ラベル' }
@@ -870,12 +892,12 @@ input::placeholder { color: var(--muted-2); }
       aroma: 'キャラメル、バタースコッチ、トーストしたオーク',
       palate: '加熱アガベの甘みに、オークの厚みが重なる',
       finish: 'バニラと黒胡椒がゆっくりと引いていく余韻',
-      desc: 'オーク樽で24ヶ月熟成させたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
+      desc: 'テキーラの公的規格で600L以下のオーク樽・1年以上の熟成が定められたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
     },
     {
       slot: 'extra-anejo-cristalino', name: 'EXTRA AÑEJO CRISTALINO', en: 'EXTRA AÑEJO CRISTALINO', jp: 'エクストラアネホ・クリスタリーノ',
-      age: '36ヶ月以上熟成・ろ過', /* 仮スペック: 要蒸留所確認 */
-      badge: '', comingSoon: true,
+      age: 'オーク樽熟成（規格 3年以上）・ろ過', /* 実熟成月数・ろ過工程は要蒸留所確認 */
+      badge: '', comingSoon: true, /* 容量・度数は要蒸留所確認 */
       img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
       ph: 'EXTRA AÑEJO CRISTALINO ボトル写真（準備中）',
@@ -912,15 +934,13 @@ input::placeholder { color: var(--muted-2); }
     return span;
   };
 
-  // Local product shots (transparent WebP) get a tone class for their CSS
-  // backdrop and carry no credit; Unsplash sources keep their credit chip.
-  const photo = (p, alt) => {
-    const tone = p.tone ? ' photo--product photo--' + p.tone : '';
-    return el('figure', { class: 'photo photo--fill' + tone },
+  // Local product shots (JPG, 背景込みの実写) carry no credit and fill the
+  // frame via .photo's object-fit; Unsplash sources keep their credit chip.
+  const photo = (p, alt) =>
+    el('figure', { class: 'photo photo--fill' },
       el('img', { src: p.img, alt, loading: 'lazy' }),
       p.creditName ? creditChip(p.creditName, p.creditHref) : null
     );
-  };
 
   /* ── Age-verification gate ───────────────────────────────── */
   const gate = $('#gate');
@@ -1040,7 +1060,9 @@ input::placeholder { color: var(--muted-2); }
         el('div', { class: 'detail__buyrow' }, price, buyBtn),
         added,
         el('p', { class: 'detail__fine' },
-          '※ 表示価格・仕様は参考値です。輸入条件の確定後に変更となる場合があります。',
+          '※ 表示価格は参考価格です（輸入条件により変動）。',
+          el('br'),
+          '※ 熟成期間はテキーラの公的規格（NOM-006）が定めるカテゴリ基準の表記です。',
           el('br'),
           '※ 本商品は現在メキシコ国内限定流通です（日本未上陸）。'
         )

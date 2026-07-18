@@ -389,6 +389,7 @@ input::placeholder { color: var(--muted-2); }
   gap: clamp(20px, 3vw, 36px);
   margin-top: clamp(40px, 6vw, 72px);
 }
+.collection__fine { margin: 26px 0 0; font-size: 11px; text-align: center; color: var(--muted-2); }
 
 .card {
   cursor: pointer;

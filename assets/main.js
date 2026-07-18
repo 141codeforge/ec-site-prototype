@@ -9,13 +9,16 @@
   const UNSPLASH_HOME = 'https://unsplash.com/' + UTM;
 
   /* ── Product data ─────────────────────────────────────────
-     熟成期間は仮スペック（要蒸留所確認）。価格は参考の仮値で、
-     輸入条件の確定後に要調整。風味の記述は海外レビューの傾向を
-     要約したもの（直接引用ではない）。                        ── */
+     熟成期間: 蒸留所固有の実数値は非公表のため、CRT/NOM-006 の
+     カテゴリ規格（レポサド2ヶ月以上／アネホ1年以上／エクストラ
+     アネホ3年以上）で表記。実数値は要蒸留所確認。
+     価格: 参考価格（輸入条件により変動）。要蒸留所確認。
+     風味の記述は海外レビューの傾向を要約したもの（直接引用では
+     ない）。                                                  ── */
   const PRODUCTS = [
     {
       slot: 'blanco', name: 'BLANCO', en: 'BLANCO', jp: 'ブランコ',
-      age: '未熟成', badge: '', comingSoon: true,
+      age: 'ブランコ規格（熟成2ヶ月未満）', badge: '', comingSoon: true, /* 容量・度数・熟成有無は要蒸留所確認 */
       img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
       ph: 'BLANCO ボトル写真（準備中）',
@@ -23,8 +26,8 @@
     },
     {
       slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
-      age: 'オーク樽 6ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
-      vol: '700ml', abv: '36%',
+      age: 'オーク樽熟成（規格 2ヶ月以上）', /* 実熟成月数は要蒸留所確認 */
+      vol: '700ml', abv: '36%', /* 実ボトルのラベル記載 */
       price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
       img: 'assets/img/card_reposado_v3.jpg',
@@ -33,12 +36,12 @@
       aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
       palate: '加熱アガベの甘みに、穏やかなオーク',
       finish: '黒胡椒のスパイスがほどよく締める余韻',
-      desc: 'オーク樽で6ヶ月熟成させたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
+      desc: 'テキーラの公的規格でオーク樽2ヶ月以上の熟成が定められたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
     },
     {
       slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
-      age: 'オーク樽 24ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
-      vol: '800ml', abv: '38%',
+      age: 'オーク樽熟成（規格 1年以上）', /* 実熟成月数は要蒸留所確認 */
+      vol: '800ml', abv: '38%', /* 実ボトルのラベル記載 */
       price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
       img: 'assets/img/card_anejo_v3.jpg',
@@ -51,12 +54,12 @@
       aroma: 'キャラメル、バタースコッチ、トーストしたオーク',
       palate: '加熱アガベの甘みに、オークの厚みが重なる',
       finish: 'バニラと黒胡椒がゆっくりと引いていく余韻',
-      desc: 'オーク樽で24ヶ月熟成させたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
+      desc: 'テキーラの公的規格で600L以下のオーク樽・1年以上の熟成が定められたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
     },
     {
       slot: 'extra-anejo-cristalino', name: 'EXTRA AÑEJO CRISTALINO', en: 'EXTRA AÑEJO CRISTALINO', jp: 'エクストラアネホ・クリスタリーノ',
-      age: '36ヶ月以上熟成・ろ過', /* 仮スペック: 要蒸留所確認 */
-      badge: '', comingSoon: true,
+      age: 'オーク樽熟成（規格 3年以上）・ろ過', /* 実熟成月数・ろ過工程は要蒸留所確認 */
+      badge: '', comingSoon: true, /* 容量・度数は要蒸留所確認 */
       img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
       ph: 'EXTRA AÑEJO CRISTALINO ボトル写真（準備中）',
@@ -219,7 +222,9 @@
         el('div', { class: 'detail__buyrow' }, price, buyBtn),
         added,
         el('p', { class: 'detail__fine' },
-          '※ 表示価格・仕様は参考値です。輸入条件の確定後に変更となる場合があります。',
+          '※ 表示価格は参考価格です（輸入条件により変動）。',
+          el('br'),
+          '※ 熟成期間はテキーラの公的規格（NOM-006）が定めるカテゴリ基準の表記です。',
           el('br'),
           '※ 本商品は現在メキシコ国内限定流通です（日本未上陸）。'
         )
