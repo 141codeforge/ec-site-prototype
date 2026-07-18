@@ -2,13 +2,27 @@
 
 A single-page, scroll-type e-commerce landing site for **Reserva de los
 González**（レセルバ・デ・ロス・ゴンサレス）, a real Mexico-only tequila brand
-produced by Tequila Casa de los González, S.A. de C.V. (NOM 1518, Ayotlán,
-Jalisco). Dark × gold "aged luxury" aesthetic, Japanese copy, built as a
-self-contained static site (HTML / CSS / vanilla JS — no build step).
+produced by Tequila Casa de los González, S.A. de C.V. (NOM 1518, Km. 10
+Carretera Atotonilco–Ayotlán, Jalisco, México). Dark × gold "aged luxury"
+aesthetic, Japanese copy, built as a self-contained static site
+(HTML / CSS / vanilla JS — no build step).
 
 このサイトは日本の輸入商社向け営業資料として使うデモ（プロトタイプ）です。
-ブランドは日本未上陸・メキシコ国内限定流通のため、価格・熟成期間などの
-仮の数値には `仮スペック: 要蒸留所確認` / `仮価格` のコメントを付けています。
+ブランドは日本未上陸・メキシコ国内限定流通のため、事実情報は次のルールで
+扱っています。
+
+- **熟成期間** — 蒸留所固有の実数値は非公表のため、CRT/NOM-006 のカテゴリ
+  規格（レポサド: オーク樽2ヶ月以上 / アネホ: 600L以下のオーク樽で1年以上 /
+  エクストラアネホ: 同3年以上）で表記。実数値が確認できたら差し替える
+  （コード中の `要蒸留所確認` コメントが対象箇所）。
+- **容量・度数** — 手元の実ボトルのラベル記載（Reposado 700ml・36% /
+  Añejo 800ml・38%）が一次情報。Blanco と Extra Añejo Cristalino は
+  スペック未確認のため「近日入荷予定」カードに数値を載せていない。
+- **価格** — 日本での販売価格は未定。表示は参考価格（輸入条件により変動）で、
+  `仮価格` コメント付き。
+- **風味の記述** — 海外レビューの傾向の要約（主観表現の範囲）。受賞歴・
+  評価点・生産本数など、裏取りできない客観的事実は記載しない。
+
 Don Julio への言及は創業家の歴史的事実の記載のみで、現 Don Julio ブランド
 （Diageo 社所有）との提携・関係を示すものではありません。
 
@@ -56,8 +70,8 @@ chats/                    Design conversation transcript
   実情報（石窯・ローラーミル・深井戸水・銅コイル付きスチルで2回蒸留）。
 - **商品ラインナップ** — the real four-bottle lineup in a responsive grid:
   Blanco（近日入荷予定）/ Reposado（700ml・36%）/ Añejo（800ml・38%）/
-  Extra Añejo Cristalino（近日入荷予定）. Hovering a card reveals its aging
-  spec and tasting-note tendencies.
+  Extra Añejo Cristalino（近日入荷予定）. Hovering a card reveals its
+  category aging spec (CRT/NOM-006) and tasting-note tendencies.
 - **商品詳細モーダル** — opens on Reposado / Añejo card click: tasting notes
   (香り/味わい/余韻), reference price, and "カートに入れる" (increments the
   cart, shows a confirmation). Closes on the ×, backdrop click, or Escape.
