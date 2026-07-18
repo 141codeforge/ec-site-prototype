@@ -13,8 +13,8 @@
     {
       slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
       age: '10ヶ月', price: '¥18,700', badge: '',
-      img: 'https://images.unsplash.com/photo-1698288547419-407ca6bafe2a?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'Jon Lanzieri', creditHref: 'https://unsplash.com/@jonlanzieri',
+      img: 'assets/img/reposado_bottle_alt.webp',
+      tone: 'reposado',
       ph: 'REPOSADO ボトル写真',
       notesLine: '蜂蜜 ／ バニラ ／ 焼いた青アガベ',
       aroma: '蜂蜜、バニラ、かすかな柑橘の花',
@@ -25,9 +25,13 @@
     {
       slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
       age: '26ヶ月', price: '¥36,300', badge: '',
-      img: 'https://images.unsplash.com/photo-1718881949298-b658a109bf0b?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'SJ 📸', creditHref: 'https://unsplash.com/@uxsj_ph',
+      img: 'assets/img/anejo_bottle_alt.webp',
+      tone: 'anejo',
       ph: 'AÑEJO ボトル写真',
+      gallery: [
+        { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
+        { src: 'assets/img/anejo_label_closeup.webp', alt: 'AÑEJO ラベル' }
+      ],
       notesLine: 'キャラメル ／ オーク ／ ドライフルーツ',
       aroma: 'キャラメル、トーストしたオーク、オレンジピール',
       palate: 'ドライフルーツの凝縮感と、しなやかなタンニン',
@@ -36,7 +40,7 @@
     },
     {
       slot: 'extra-anejo', name: 'EXTRA AÑEJO', en: 'EXTRA AÑEJO', jp: 'エクストラアネホ',
-      age: '5年', price: '¥79,200', badge: '小ロット',
+      age: '5年', price: '¥79,200', badge: '小ロット', comingSoon: true,
       img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
       ph: 'EXTRA AÑEJO ボトル写真',
@@ -48,7 +52,7 @@
     },
     {
       slot: 'gran-reserva', name: 'GRAN RESERVA', en: 'EXTRA AÑEJO — GRAN RESERVA', jp: 'グラン・レセルバ ／ 8年熟成',
-      age: '8年', price: '¥165,000', badge: '会員限定 300本',
+      age: '8年', price: '¥165,000', badge: '会員限定 300本', comingSoon: true,
       img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
       ph: 'GRAN RESERVA ボトル写真',
@@ -89,11 +93,15 @@
     return span;
   };
 
-  const photo = (src, alt, name, href) =>
-    el('figure', { class: 'photo photo--fill' },
-      el('img', { src, alt, loading: 'lazy' }),
-      creditChip(name, href)
+  // Local product shots (transparent WebP) get a tone class for their CSS
+  // backdrop and carry no credit; Unsplash sources keep their credit chip.
+  const photo = (p, alt) => {
+    const tone = p.tone ? ' photo--product photo--' + p.tone : '';
+    return el('figure', { class: 'photo photo--fill' + tone },
+      el('img', { src: p.img, alt, loading: 'lazy' }),
+      p.creditName ? creditChip(p.creditName, p.creditHref) : null
     );
+  };
 
   /* ── Age-verification gate ───────────────────────────────── */
   const gate = $('#gate');
@@ -128,27 +136,35 @@
     const overlay = el('div', { class: 'card__overlay' },
       el('div', { class: 'card__age',   text: '熟成 ' + p.age }),
       el('div', { class: 'card__notes', text: p.notesLine }),
-      el('div', { class: 'card__more',  text: '詳細を見る →' })
+      p.comingSoon ? null : el('div', { class: 'card__more', text: '詳細を見る →' })
     );
 
     const media = el('div', { class: 'card__media' },
-      photo(p.img, p.ph, p.creditName, p.creditHref),
+      photo(p, p.ph),
       overlay
     );
+    if (p.comingSoon) {
+      media.append(el('div', { class: 'card__soon-overlay' }, el('span', { text: 'COMING SOON' })));
+    }
     if (p.badge) media.append(el('div', { class: 'card__badge', text: p.badge }));
 
-    const card = el('div', { class: 'card', tabindex: '0', role: 'button', 'aria-label': p.name + '（' + p.jp + '）' },
+    const card = el('div', { class: 'card' + (p.comingSoon ? ' card--soon' : '') },
       media,
       el('div', { class: 'card__info' },
         el('div', { class: 'card__name',  text: p.name }),
         el('div', { class: 'card__jp',    text: p.jp }),
-        el('div', { class: 'card__price', text: p.price })
+        el('div', { class: 'card__price', text: p.comingSoon ? 'Coming Soon' : p.price })
       )
     );
-    card.addEventListener('click', () => openDetail(i));
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(i); }
-    });
+    if (!p.comingSoon) {
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', p.name + '（' + p.jp + '）');
+      card.addEventListener('click', () => openDetail(i));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDetail(i); }
+      });
+    }
     grid.append(card);
   });
 
@@ -184,7 +200,14 @@
 
     const card = el('div', { class: 'detail__card' },
       el('button', { class: 'detail__close', 'aria-label': '閉じる', text: '×', onclick: closeDetail }),
-      el('div', { class: 'detail__media' }, photo(p.img, 'ボトル写真（' + p.name + '）', p.creditName, p.creditHref)),
+      el('div', { class: 'detail__media' + (p.gallery ? ' detail__media--stack' : '') },
+        photo(p, 'ボトル写真（' + p.name + '）'),
+        p.gallery ? el('div', { class: 'detail__gallery' },
+          ...p.gallery.map((g) =>
+            el('figure', { class: 'photo' }, el('img', { src: g.src, alt: g.alt, loading: 'lazy' }))
+          )
+        ) : null
+      ),
       el('div', { class: 'detail__body' },
         el('div', { class: 'detail__en',   text: 'VELADA — ' + p.en }),
         el('h3',  { class: 'detail__name', text: p.name }),
