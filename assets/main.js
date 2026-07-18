@@ -97,10 +97,13 @@
 
   // Local product shots (transparent WebP) get a tone class for their CSS
   // backdrop and carry no credit; Unsplash sources keep their credit chip.
+  // Bottles go inside a .stage-bottle wrapper: it carries the contact
+  // shadow (1.4x bottle width) while the img gets drop-shadow + reflection.
   const photo = (p, alt) => {
     const tone = p.tone ? ' photo--product photo--' + p.tone : '';
+    const img = el('img', { src: p.img, alt, loading: 'lazy' });
     return el('figure', { class: 'photo photo--fill' + tone },
-      el('img', { src: p.img, alt, loading: 'lazy' }),
+      p.tone ? el('span', { class: 'stage-bottle' }, img) : img,
       p.creditName ? creditChip(p.creditName, p.creditHref) : null
     );
   };
