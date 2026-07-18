@@ -124,6 +124,41 @@ input::placeholder { color: var(--muted-2); }
 .credit a { color: inherit; text-decoration: none; }
 .credit a:hover, .credit a:focus-visible { text-decoration: underline; }
 
+/* ── Bottle stage (hero / collection / members 共通) ──────────
+   元画像は高さ1024pxしかないため、表示は最大でも440pxに制限し
+   拡大しない。存在感は余白・スポットライト・接地影・床反射で出す。
+   .stage-bottle はボトル1本を包むラッパー:
+   - ::before … 楕円の接地影（幅はボトルの1.4倍）
+   - img      … drop-shadow + 床反射（-webkit-box-reflect）      */
+.stage-bottle {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin: 0;
+  line-height: 0;
+}
+.stage-bottle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  width: 140%;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  filter: blur(18px);
+}
+.stage-bottle img {
+  display: block;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,0.5));
+  -webkit-box-reflect: below 1px linear-gradient(transparent 78%, rgba(255,255,255,0.10));
+}
+
 /* ── Age-verification modal ──────────────────────────────── */
 .gate {
   position: fixed;
@@ -285,29 +320,41 @@ input::placeholder { color: var(--muted-2); }
 .hero__cta { margin-top: 40px; }
 .hero__media {
   position: relative;
-  height: clamp(420px, 62vh, 640px);
+  height: clamp(540px, 66vh, 640px);
 }
 
+/* 黒(#0a0a12)→濃紺のグラデ + ゴールドのスポットライト。
+   ボトルは拡大せず、余白と背景演出で存在感を出す。 */
 .hero__stage {
+  position: relative;
   height: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: clamp(20px, 4vw, 48px);
-  padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(40px, 6vw, 64px);
-  background: linear-gradient(180deg, #0a0a12, #14141f);
+  gap: clamp(28px, 4vw, 56px);
+  padding: clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(48px, 6vw, 72px);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 75% 50% at 50% 32%, rgba(212,175,55,0.14), transparent 70%),
+    linear-gradient(180deg, #0a0a12, #101426 60%, #0b0e1a);
   border: 1px solid var(--line);
 }
-.hero__bottle {
-  height: 100%;
-  max-width: 40%;
-  object-fit: contain;
-  object-position: bottom;
-  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
+/* ごく薄いビネット */
+.hero__stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 105% 90% at 50% 45%, transparent 62%, rgba(0,0,0,0.32));
+  pointer-events: none;
 }
-.hero__bottle--lead {
-  transform: scale(1.04);
-  transform-origin: bottom center;
+/* 実物の縮尺が揃っていないため、CSSで底辺を揃えつつ比率を固定。
+   （元画像1024px → Retinaでもぼやけない440px以下に制限） */
+.hero__bottle--reposado { height: 400px; }
+.hero__bottle--anejo    { height: 428px; }
+@media (max-width: 560px) {
+  .hero__media { height: clamp(430px, 60vh, 500px); }
+  .hero__bottle--reposado { height: 300px; }
+  .hero__bottle--anejo    { height: 321px; }
 }
 
 /* ── Story ───────────────────────────────────────────────── */
@@ -363,29 +410,43 @@ input::placeholder { color: var(--muted-2); }
 }
 .card:hover { border-color: rgba(200,164,94,0.5); }
 
-.card__media { position: relative; height: 320px; }
+.card__media { position: relative; height: 520px; }
 .card__media .photo { position: absolute; inset: 0; }
 
-/* Product shots are transparent WebPs — never crop them, let CSS paint the mood. */
-.photo--product { display: flex; align-items: flex-end; justify-content: center; }
-.photo--product img {
-  width: auto;
-  max-width: 70%;
-  height: 100%;
-  object-fit: contain;
-  object-position: bottom;
-  padding: 24px 0 28px;
-  filter: drop-shadow(0 18px 28px rgba(0,0,0,0.5));
+/* Product shots are transparent WebPs — never crop them, let CSS paint the mood.
+   ボトルは固定 360px（元画像1024px、拡大禁止）。上下の余白 + スポットライト +
+   接地影 + 床反射（.stage-bottle）でステージに立たせる。 */
+.photo--product {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 40px 0 44px;
 }
+.photo--product .stage-bottle {
+  height: 100%;
+  max-height: 360px;
+}
+.photo--product .stage-bottle img {
+  height: 100%;
+  max-width: none;
+  transition: transform 0.4s ease;
+}
+/* ホバーでボトルだけが4px浮く（接地影はラッパー側に残る） */
+.card:hover .photo--product .stage-bottle img,
+.card:focus-visible .photo--product .stage-bottle img {
+  transform: translateY(-4px);
+}
+/* Reposado = 深緑、Añejo = 黒×金の縦グラデ。
+   スポットライトはボトル上部あたりを中心に。 */
 .photo--reposado {
   background:
-    radial-gradient(ellipse 90% 60% at 50% 28%, rgba(255,255,255,0.08), transparent 70%),
-    linear-gradient(180deg, #3a5a42, #2d4a34 55%, #1a2e20);
+    radial-gradient(ellipse 85% 55% at 50% 26%, rgba(212,175,55,0.14), transparent 70%),
+    linear-gradient(180deg, #24462f, #14301e 55%, #0a1d12);
 }
 .photo--anejo {
   background:
-    radial-gradient(ellipse 85% 55% at 50% 30%, rgba(200,164,94,0.32), rgba(200,164,94,0.08) 55%, transparent 75%),
-    linear-gradient(180deg, #14100a, #060504);
+    radial-gradient(ellipse 85% 55% at 50% 26%, rgba(212,175,55,0.14), transparent 70%),
+    linear-gradient(180deg, #1c1509, #120d06 45%, #070503);
 }
 
 /* Coming-soon cards */
@@ -569,21 +630,18 @@ input::placeholder { color: var(--muted-2); }
   max-width: 1100px;
   margin: 0 auto;
 }
+/* 閉じた化粧箱をまっすぐ立てて小さめ(300px)に。演出はステージ共通。 */
 .members__visual {
   margin: 0;
-  height: clamp(340px, 44vw, 480px);
+  height: clamp(360px, 40vw, 430px);
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: radial-gradient(ellipse 75% 55% at 50% 40%, rgba(200,164,94,0.2), rgba(200,164,94,0.05) 55%, transparent 78%);
+  padding-bottom: 48px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 75% 55% at 50% 35%, rgba(212,175,55,0.14), transparent 75%);
 }
-.members__visual img {
-  height: 96%;
-  max-width: 80%;
-  object-fit: contain;
-  object-position: bottom;
-  filter: drop-shadow(0 24px 40px rgba(0,0,0,0.55));
-}
+.members__visual img { height: 300px; }
 .members__title {
   margin: 20px 0 0;
   font-family: var(--serif-display);
