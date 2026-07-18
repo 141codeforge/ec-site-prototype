@@ -52,10 +52,10 @@
       <button class="btn btn--outline hero__cta" data-nav="collection">コレクションを見る</button>
     </div>
     <div class="hero__media fade-up fade-up--slow">
-      <figure class="photo photo--fill">
-        <img src="https://images.unsplash.com/photo-1678667593664-792513e9ff7b?q=80&w=1400&auto=format&fit=crop" alt="ボトルのメインビジュアル" loading="eager">
-        <span class="credit"><a href="https://unsplash.com/@capture_it?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Photo by Hector Reyes</a> on <a href="https://unsplash.com/?utm_source=claude_design&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a></span>
-      </figure>
+      <div class="hero__stage">
+        <img class="hero__bottle" src="assets/img/reposado_bottle.webp" alt="VELADA REPOSADO ボトル" loading="eager">
+        <img class="hero__bottle hero__bottle--lead" src="assets/img/anejo_bottle.webp" alt="VELADA AÑEJO ボトル" loading="eager">
+      </div>
     </div>
   </section>
 
@@ -122,14 +122,21 @@
 
   <!-- ── 会員先行販売 ────────────────────────────────────── -->
   <section class="section members" id="members" aria-label="会員先行販売">
-    <p class="eyebrow">MEMBERS ONLY</p>
-    <h2 class="members__title">GRAN RESERVA 先行販売</h2>
-    <p class="members__lead">樽番号を刻んだ八年熟成のエクストラアネホ「グラン・レセルバ」は、年間三百本のみの限定生産。会員のお客様に、一般発売に先立ちご案内いたします。</p>
-    <form class="members__form" id="membersForm" novalidate>
-      <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
-      <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
-    </form>
-    <p class="members__fine">ご登録には20歳以上であることの確認が必要です。</p>
+    <div class="members__grid">
+      <figure class="members__visual">
+        <img src="assets/img/anejo_box.webp" alt="GRAN RESERVA 化粧箱" loading="lazy">
+      </figure>
+      <div class="members__content">
+        <p class="eyebrow">MEMBERS ONLY</p>
+        <h2 class="members__title">GRAN RESERVA 先行販売</h2>
+        <p class="members__lead">樽番号を刻んだ八年熟成のエクストラアネホ「グラン・レセルバ」は、年間三百本のみの限定生産。会員のお客様に、一般発売に先立ちご案内いたします。</p>
+        <form class="members__form" id="membersForm" novalidate>
+          <input type="email" class="members__input" placeholder="メールアドレス" aria-label="メールアドレス">
+          <button type="submit" class="btn btn--solid btn--sm">案内を受け取る</button>
+        </form>
+        <p class="members__fine">ご登録には20歳以上であることの確認が必要です。</p>
+      </div>
+    </div>
   </section>
 
   <!-- ── フッター ─────────────────────────────────────────── -->

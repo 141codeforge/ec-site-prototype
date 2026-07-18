@@ -53,9 +53,12 @@ the prototype's breakpoints.
 
 ## Images & attribution
 
-Product and story photography comes from Unsplash, referenced by URL exactly as
-in the prototype. Each photo carries its required "Photo by … on Unsplash"
-credit (with the `utm` referral params Unsplash's terms require). To swap in real
-brand photography, replace the `img` `src` values in `index.html` (hero, story)
-and in the `PRODUCTS` array in `assets/main.js` (collection + detail), and update
+Product photography (hero bottles, REPOSADO / AÑEJO collection cards + detail,
+GRAN RESERVA box) uses the brand's own transparent WebP shots in `assets/img/`,
+rendered with `object-fit: contain` over CSS backdrops. Story photography and
+the two Coming-Soon card placeholders still come from Unsplash, referenced by
+URL; each of those photos carries its required "Photo by … on Unsplash" credit
+(with the `utm` referral params Unsplash's terms require). To swap in more
+brand photography, replace the `img` `src` values in `index.html` (story) and
+in the `PRODUCTS` array in `assets/main.js` (collection + detail), and remove
 the corresponding credits.
