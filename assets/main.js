@@ -27,7 +27,7 @@
       vol: '700ml', abv: '36%',
       price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/card_reposado.jpg',
+      img: 'assets/img/card_reposado_v3.jpg',
       ph: 'Reserva de los González Reposado 700ml ボトル',
       notesLine: '蜂蜜 ／ バニラ ／ 加熱アガベ',
       aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
@@ -41,7 +41,7 @@
       vol: '800ml', abv: '38%',
       price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/card_anejo.jpg',
+      img: 'assets/img/card_anejo_v3.jpg',
       ph: 'Reserva de los González Añejo 800ml ボトル',
       gallery: [
         { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
