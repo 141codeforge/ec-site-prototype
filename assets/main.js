@@ -27,9 +27,8 @@
       vol: '700ml', abv: '36%',
       price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/reposado_bottle_alt.webp',
-      tone: 'reposado',
-      ph: 'REPOSADO ボトル写真',
+      img: 'assets/img/card_reposado_v3.jpg',
+      ph: 'Reserva de los González Reposado 700ml ボトル',
       notesLine: '蜂蜜 ／ バニラ ／ 加熱アガベ',
       aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
       palate: '加熱アガベの甘みに、穏やかなオーク',
@@ -42,9 +41,8 @@
       vol: '800ml', abv: '38%',
       price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
       badge: '',
-      img: 'assets/img/anejo_bottle_alt.webp',
-      tone: 'anejo',
-      ph: 'AÑEJO ボトル写真',
+      img: 'assets/img/card_anejo_v3.jpg',
+      ph: 'Reserva de los González Añejo 800ml ボトル',
       gallery: [
         { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
         { src: 'assets/img/anejo_label_closeup.webp', alt: 'AÑEJO ラベル' }
@@ -95,18 +93,13 @@
     return span;
   };
 
-  // Local product shots (transparent WebP) get a tone class for their CSS
-  // backdrop and carry no credit; Unsplash sources keep their credit chip.
-  // Bottles go inside a .stage-bottle wrapper: it carries the contact
-  // shadow (1.4x bottle width) while the img gets drop-shadow + reflection.
-  const photo = (p, alt) => {
-    const tone = p.tone ? ' photo--product photo--' + p.tone : '';
-    const img = el('img', { src: p.img, alt, loading: 'lazy' });
-    return el('figure', { class: 'photo photo--fill' + tone },
-      p.tone ? el('span', { class: 'stage-bottle' }, img) : img,
+  // Local product shots (JPG, 背景込みの実写) carry no credit and fill the
+  // frame via .photo's object-fit; Unsplash sources keep their credit chip.
+  const photo = (p, alt) =>
+    el('figure', { class: 'photo photo--fill' },
+      el('img', { src: p.img, alt, loading: 'lazy' }),
       p.creditName ? creditChip(p.creditName, p.creditHref) : null
     );
-  };
 
   /* ── Age-verification gate ───────────────────────────────── */
   const gate = $('#gate');
