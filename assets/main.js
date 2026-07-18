@@ -1,5 +1,5 @@
 /* ============================================================
-   VELADA — interactions
+   RESERVA DE LOS GONZÁLEZ — interactions
    Age gate · nav scroll · product grid · detail modal · cart
    ============================================================ */
 (() => {
@@ -8,23 +8,40 @@
   const UTM = '?utm_source=claude_design&utm_medium=referral';
   const UNSPLASH_HOME = 'https://unsplash.com/' + UTM;
 
-  /* ── Product data (mirrors the prototype's `data` array) ── */
+  /* ── Product data ─────────────────────────────────────────
+     熟成期間は仮スペック（要蒸留所確認）。価格は参考の仮値で、
+     輸入条件の確定後に要調整。風味の記述は海外レビューの傾向を
+     要約したもの（直接引用ではない）。                        ── */
   const PRODUCTS = [
     {
+      slot: 'blanco', name: 'BLANCO', en: 'BLANCO', jp: 'ブランコ',
+      age: '未熟成', badge: '', comingSoon: true,
+      img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
+      creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
+      ph: 'BLANCO ボトル写真（準備中）',
+      notesLine: '加熱アガベ ／ 黒胡椒 ／ 蜂蜜'
+    },
+    {
       slot: 'reposado', name: 'REPOSADO', en: 'REPOSADO', jp: 'レポサド',
-      age: '10ヶ月', price: '¥18,700', badge: '',
+      age: 'オーク樽 6ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
+      vol: '700ml', abv: '36%',
+      price: '¥9,900', /* 仮価格: 輸入条件確定後に要調整 */
+      badge: '',
       img: 'assets/img/reposado_bottle_alt.webp',
       tone: 'reposado',
       ph: 'REPOSADO ボトル写真',
-      notesLine: '蜂蜜 ／ バニラ ／ 焼いた青アガベ',
-      aroma: '蜂蜜、バニラ、かすかな柑橘の花',
-      palate: '焼いた青アガベの甘み、軽いオークのスパイス',
-      finish: '穏やかで澄んだ、ミネラルを感じる余韻',
-      desc: 'アメリカンオークの旧バーボン樽で10ヶ月。アガベ本来の輝きに、樽由来のやわらかな甘みがひと筆加わった、蒸留所の原点となる一本です。'
+      notesLine: '蜂蜜 ／ バニラ ／ 加熱アガベ',
+      aroma: '蜂蜜、バニラ、加熱したアガベの甘い香り',
+      palate: '加熱アガベの甘みに、穏やかなオーク',
+      finish: '黒胡椒のスパイスがほどよく締める余韻',
+      desc: 'オーク樽で6ヶ月熟成させたレポサド。海外のレビューでは、蜂蜜やバニラ、加熱アガベを思わせる風味の傾向が語られています。アガベの輪郭に、樽のやわらかな甘みが加わった一本です。'
     },
     {
       slot: 'anejo', name: 'AÑEJO', en: 'AÑEJO', jp: 'アネホ',
-      age: '26ヶ月', price: '¥36,300', badge: '',
+      age: 'オーク樽 24ヶ月熟成', /* 仮スペック: 要蒸留所確認 */
+      vol: '800ml', abv: '38%',
+      price: '¥16,500', /* 仮価格: 輸入条件確定後に要調整 */
+      badge: '',
       img: 'assets/img/anejo_bottle_alt.webp',
       tone: 'anejo',
       ph: 'AÑEJO ボトル写真',
@@ -32,35 +49,20 @@
         { src: 'assets/img/anejo_box_closeup.webp',   alt: 'AÑEJO 化粧箱' },
         { src: 'assets/img/anejo_label_closeup.webp', alt: 'AÑEJO ラベル' }
       ],
-      notesLine: 'キャラメル ／ オーク ／ ドライフルーツ',
-      aroma: 'キャラメル、トーストしたオーク、オレンジピール',
-      palate: 'ドライフルーツの凝縮感と、しなやかなタンニン',
-      finish: '長く温かい、シガーを思わせる余韻',
-      desc: 'フレンチオークとアメリカンオークを使い分け、26ヶ月の熟成を経て瓶詰め。ウイスキー愛好家にこそ味わっていただきたい、深みのあるアネホです。'
+      notesLine: 'キャラメル ／ バタースコッチ ／ オーク',
+      aroma: 'キャラメル、バタースコッチ、トーストしたオーク',
+      palate: '加熱アガベの甘みに、オークの厚みが重なる',
+      finish: 'バニラと黒胡椒がゆっくりと引いていく余韻',
+      desc: 'オーク樽で24ヶ月熟成させたアネホ。海外のレビューでは、キャラメルやバタースコッチ、オークを思わせる風味の傾向が語られています。一族の熟成観をよく映す一本です。'
     },
     {
-      slot: 'extra-anejo', name: 'EXTRA AÑEJO', en: 'EXTRA AÑEJO', jp: 'エクストラアネホ',
-      age: '5年', price: '¥79,200', badge: '小ロット', comingSoon: true,
+      slot: 'extra-anejo-cristalino', name: 'EXTRA AÑEJO CRISTALINO', en: 'EXTRA AÑEJO CRISTALINO', jp: 'エクストラアネホ・クリスタリーノ',
+      age: '36ヶ月以上熟成・ろ過', /* 仮スペック: 要蒸留所確認 */
+      badge: '', comingSoon: true,
       img: 'https://images.unsplash.com/photo-1670098499730-4e22ec6d69df?q=80&w=1000&auto=format&fit=crop',
       creditName: 'Andy bardon', creditHref: 'https://unsplash.com/@wc_unsplash',
-      ph: 'EXTRA AÑEJO ボトル写真',
-      notesLine: 'カカオ ／ タバコリーフ ／ ベーキングスパイス',
-      aroma: 'ダークカカオ、タバコリーフ、乾いた革',
-      palate: 'ビターチョコレートとベーキングスパイスの重層',
-      finish: '静かに続く、ビロードのような長い余韻',
-      desc: '五年の歳月を樽の中で過ごした、当蒸留所の粋。一樽ごとに瓶詰めされ、ラベルには樽番号が手書きで記されます。特別な夜のための一本に。'
-    },
-    {
-      slot: 'gran-reserva', name: 'GRAN RESERVA', en: 'EXTRA AÑEJO — GRAN RESERVA', jp: 'グラン・レセルバ ／ 8年熟成',
-      age: '8年', price: '¥165,000', badge: '会員限定 300本', comingSoon: true,
-      img: 'https://images.unsplash.com/photo-1696182736807-5d21e38056ec?q=80&w=1000&auto=format&fit=crop',
-      creditName: 'Nurlan Isazade', creditHref: 'https://unsplash.com/@nurlanisazade',
-      ph: 'GRAN RESERVA ボトル写真',
-      notesLine: '黒糖 ／ 熟した無花果 ／ 古樽の香気',
-      aroma: '黒糖、熟した無花果、白檀',
-      palate: '蜜のような粘性と、幾重にも折り重なる樽香',
-      finish: 'いつまでも消えない、瞑想的な余韻',
-      desc: '八年熟成、年間三百本のみ。職人が一本ずつ吹いたクリスタルボトルを桐箱に納めてお届けします。贈答に、そして人生の節目に。'
+      ph: 'EXTRA AÑEJO CRISTALINO ボトル写真（準備中）',
+      notesLine: 'バニラ ／ オーク ／ 加熱アガベ'
     }
   ];
 
@@ -134,7 +136,7 @@
   const grid = $('#productGrid');
   PRODUCTS.forEach((p, i) => {
     const overlay = el('div', { class: 'card__overlay' },
-      el('div', { class: 'card__age',   text: '熟成 ' + p.age }),
+      el('div', { class: 'card__age',   text: p.age }),
       el('div', { class: 'card__notes', text: p.notesLine }),
       p.comingSoon ? null : el('div', { class: 'card__more', text: '詳細を見る →' })
     );
@@ -153,7 +155,7 @@
       el('div', { class: 'card__info' },
         el('div', { class: 'card__name',  text: p.name }),
         el('div', { class: 'card__jp',    text: p.jp }),
-        el('div', { class: 'card__price', text: p.comingSoon ? 'Coming Soon' : p.price })
+        el('div', { class: 'card__price', text: p.comingSoon ? '近日入荷予定' : p.price })
       )
     );
     if (!p.comingSoon) {
@@ -196,7 +198,7 @@
 
     const price = el('div', { class: 'detail__price' });
     price.append(p.price + ' ');
-    price.append(el('small', { text: '（税込）' }));
+    price.append(el('small', { text: '（税込・参考価格）' }));
 
     const card = el('div', { class: 'detail__card' },
       el('button', { class: 'detail__close', 'aria-label': '閉じる', text: '×', onclick: closeDetail }),
@@ -209,9 +211,9 @@
         ) : null
       ),
       el('div', { class: 'detail__body' },
-        el('div', { class: 'detail__en',   text: 'VELADA — ' + p.en }),
+        el('div', { class: 'detail__en',   text: 'RESERVA DE LOS GONZÁLEZ — ' + p.en }),
         el('h3',  { class: 'detail__name', text: p.name }),
-        el('div', { class: 'detail__meta', text: p.jp + ' ／ 熟成 ' + p.age + ' ／ 750ml ・ 40%' }),
+        el('div', { class: 'detail__meta', text: p.jp + ' ／ ' + p.age + ' ／ ' + p.vol + ' ・ ' + p.abv }),
         el('p',   { class: 'detail__desc', text: p.desc }),
         el('div', { class: 'detail__notes' },
           noteRow('香り', p.aroma),
@@ -221,9 +223,9 @@
         el('div', { class: 'detail__buyrow' }, price, buyBtn),
         added,
         el('p', { class: 'detail__fine' },
-          '※ 桐箱入り・ギフトラッピング対応。国内送料無料。',
+          '※ 表示価格・仕様は参考値です。輸入条件の確定後に変更となる場合があります。',
           el('br'),
-          '※ 数量限定のため、お一人様3本までとさせていただきます。'
+          '※ 本商品は現在メキシコ国内限定流通です（日本未上陸）。'
         )
       )
     );
